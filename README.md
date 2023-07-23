@@ -15,5 +15,5 @@
 4. 결제 승인
 
 ## 4. Sequence Diagram
-<img alt="sequence-diagram" src="https://github.com/f-lab-edu/fpay/assets/38533816/fb767e59-fa45-459a-ba79-e2a7de60e7c7">
+<img alt="sequence-diagram" src="https://github.com/f-lab-edu/fpay/assets/38533816/b374d655-7e0e-4f42-8e88-92874c27e066">
 

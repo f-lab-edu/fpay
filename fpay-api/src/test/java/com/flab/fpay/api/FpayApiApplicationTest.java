@@ -1,13 +1,12 @@
-package com.flab.fpay;
+package com.flab.fpay.api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class FpayApplicationTest {
+public class FpayApiApplicationTest {
 
     @Test
-    void contextLoads(){
+    void contextLoads(){ }
 
-    }
 }

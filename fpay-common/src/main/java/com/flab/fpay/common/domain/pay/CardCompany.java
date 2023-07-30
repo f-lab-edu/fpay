@@ -1,6 +1,5 @@
 package com.flab.fpay.common.domain.pay;
 
-
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,18 +12,18 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Table
-@Entity(name = "payment_type")
+@Entity(name = "card_company")
 @Getter
 @Setter
 @ToString
-public class PaymentType {
+public class CardCompany {
 
     @Id
-    @Column(name = "payment_type_id")
-    private BigInteger paymentTypeId;
+    @Column(name = "card_company_id")
+    private BigInteger cardCompanyId;
 
-    @Column(name = "payment_type")
-    private String paymentType;
+    @Column(name = "card_company_name")
+    private String cardCompanyName;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

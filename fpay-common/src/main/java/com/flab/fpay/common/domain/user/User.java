@@ -11,7 +11,7 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Table
-@Entity(name = "users")
+@Entity(name = "user")
 @Getter
 @Setter
 @ToString

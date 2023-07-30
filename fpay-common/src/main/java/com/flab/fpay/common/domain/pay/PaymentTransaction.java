@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class PaymentTransaction {
+public class PaymentTransaction implements Serializable {
 
     @Id
     @Column(name = "payment_transaction_id")

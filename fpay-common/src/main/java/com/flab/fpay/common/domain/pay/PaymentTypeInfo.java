@@ -6,6 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 
@@ -14,7 +15,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class PaymentTypeInfo {
+public class PaymentTypeInfo implements Serializable {
 
     @Id
     @Column(name = "payment_type_info_id")

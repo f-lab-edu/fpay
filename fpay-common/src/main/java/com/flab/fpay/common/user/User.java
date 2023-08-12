@@ -1,4 +1,4 @@
-package com.flab.fpay.common.domain.user;
+package com.flab.fpay.common.user;
 
 
 import lombok.Getter;

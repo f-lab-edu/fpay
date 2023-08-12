@@ -1,4 +1,4 @@
-package com.flab.fpay.common.domain.pay;
+package com.flab.fpay.common.pay;
 
 import lombok.Getter;
 import lombok.Setter;

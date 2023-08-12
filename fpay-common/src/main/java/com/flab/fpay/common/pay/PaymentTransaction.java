@@ -1,6 +1,6 @@
-package com.flab.fpay.common.domain.pay;
+package com.flab.fpay.common.pay;
 
-import com.flab.fpay.common.domain.user.User;
+import com.flab.fpay.common.user.User;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

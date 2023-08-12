@@ -1,4 +1,5 @@
-package com.flab.fpay.common.domain.pay;
+package com.flab.fpay.common.pay;
+
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,18 +14,18 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Table
-@Entity(name = "card_company")
+@Entity(name = "payment_type")
 @Getter
 @Setter
 @ToString
-public class CardCompany implements Serializable {
+public class PaymentType implements Serializable {
 
     @Id
-    @Column(name = "card_company_id")
-    private BigInteger cardCompanyId;
+    @Column(name = "payment_type_id")
+    private BigInteger paymentTypeId;
 
-    @Column(name = "card_company_name")
-    private String cardCompanyName;
+    @Column(name = "payment_type")
+    private String paymentType;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

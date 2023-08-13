@@ -1,9 +1,9 @@
 server:
-  port: 9000
+  port: 8080
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://db-hblqm-kr.vpc-pub-cdb.ntruss.com:13306/fpay
+    url: jdbc:mysql://fpay-db.mysql.database.azure.com:3306/fpay
     username: fuser
     password: fpay1234!@
   jpa:
@@ -13,3 +13,4 @@ spring:
       format_sql: true
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    show-sql: true

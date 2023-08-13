@@ -23,11 +23,15 @@ subprojects {
 //    configurations["compileOnly"].extendsFrom(configurations["annotationProcessor"])
 
     dependencies {
+
         implementation(Dependencies.SPRING_BOOT_STARTER_WEB)
         testImplementation(Dependencies.SPRING_BOOT_STARTER_TEST)
-        testImplementation("${Dependencies.JUNit}:${Versions.JUNIT_VERSION}")
-        compileOnly("${Dependencies.LOMBOK}:${Versions.LOMBOK_VERSION}")
-        annotationProcessor("${Dependencies.LOMBOK}:${Versions.LOMBOK_VERSION}")
+
+        compileOnly("${Dependencies.LOMBOK}:${Versions.LOMBOK}")
+        annotationProcessor("${Dependencies.LOMBOK}:${Versions.LOMBOK}")
+
+        testImplementation("${Dependencies.JUNIT}:${Versions.JUNIT}")
+//        testImplementation("${Dependencies.JUNIT_PLATFORM_LAUNCHER}:${Versions.JUNIT_PLATFORM_LAUNCHER}")
     }
 
     tasks {

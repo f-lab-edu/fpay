@@ -1,5 +1,6 @@
 package com.flab.fpay.common.pay;
 
+import com.flab.fpay.common.company.Company;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -21,9 +22,11 @@ public class PaymentRequest implements Serializable {
     @Column(name = "payment_request_id")
     private BigInteger paymentRequestId;
 
-    @OneToOne
-    @JoinColumn(name = "company_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Company company;
+    @Column(name = "company_id")
+    private BigInteger companyId;
+//    @OneToOne
+//    @JoinColumn(name = "company_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+//    private Company company;
 
     @Column(name = "product_id")
     private BigInteger productId;

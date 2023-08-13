@@ -1,0 +1,33 @@
+= Fpay
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+//:toclevels:2
+:sectlinks:
+
+== 초기 결제 요청
+
+=== 요청
+
+include::{snippets}/payment/request-payment/http-request.adoc[]
+include::{snippets}/payment/request-payment/request-fields.adoc[]
+
+=== 응답
+
+include::{snippets}/payment/request-payment/http-response.adoc[]
+include::{snippets}/payment/request-payment/response-fields.adoc[]
+
+== 결제 요청
+
+=== 요청
+
+//include::{snippets}/post-inquiry/http-request.adoc[]
+include::{snippets}/payment/approve/http-request.adoc[]
+include::{snippets}/payment/approve/request-fields.adoc[]
+
+
+=== 응답
+
+include::{snippets}/payment/approve/http-response.adoc[]
+include::{snippets}/payment/approve/response-fields.adoc[]

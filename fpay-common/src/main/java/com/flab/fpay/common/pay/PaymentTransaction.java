@@ -28,17 +28,21 @@ public class PaymentTransaction implements Serializable {
     @Column(name = "payment_price")
     private BigDecimal paymentPrice;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "uid", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private User user;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_type_info_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private PaymentTypeInfo paymentTypeInfo;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_request_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private PaymentRequest paymentRequest;
+    //    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "uid", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+//    private User user;
+    @Column(name = "uid")
+    private BigInteger uid;
+    //    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "payment_type_info_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+//    private PaymentTypeInfo paymentTypeInfo;
+    @Column(name = "payment_type_info_id")
+    private BigInteger paymentTypeInfoId;
+    //    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "payment_request_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+//    private PaymentRequest paymentRequest;
+    @Column(name = "payment_request_id")
+    private BigInteger paymentRequestId;
 
     @Column(name = "product_id")
     private BigInteger productId;

@@ -1,5 +1,6 @@
-package com.flab.fpay.common.pay;
+package com.flab.fpay.common.card;
 
+import com.flab.fpay.common.pay.PaymentTransaction;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

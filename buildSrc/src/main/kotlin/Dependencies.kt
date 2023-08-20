@@ -3,8 +3,9 @@ object Dependencies {
     const val LOMBOK = "org.projectlombok:lombok"
     const val JDBC_MYSQL = "mysql:mysql-connector-java"
 
-    const val JUNIT = "junit:junit"
-
+//    const val JUNIT = "junit:junit"
+    const val JUNIT_PLATFORM_LAUNCHER = "org.junit.platform:junit-platform-launcher"
+    const val JUNIT5 = "org.junit.jupiter:junit-jupiter"
     const val ASCIIDOCTOR = "org.asciidoctor.jvm.convert"
 
     const val SPRING_BOOT_STARTER_TEST = "org.springframework.boot:spring-boot-starter-test"

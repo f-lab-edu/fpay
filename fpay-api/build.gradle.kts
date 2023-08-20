@@ -6,6 +6,8 @@ plugins {
 
 dependencies {
     implementation(project(mapOf("path" to ":fpay-common")))
+    implementation(Dependencies.SPRING_BOOT_STARTER_DATA_JPA)
+    implementation("${Dependencies.JDBC_MYSQL}:${Versions.JDBC_MYSQL}")
     testImplementation(Dependencies.SPRING_REST_DOCS_MOCKMVC)
 }
 

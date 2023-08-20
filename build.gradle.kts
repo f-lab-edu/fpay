@@ -30,8 +30,9 @@ subprojects {
         compileOnly("${Dependencies.LOMBOK}:${Versions.LOMBOK}")
         annotationProcessor("${Dependencies.LOMBOK}:${Versions.LOMBOK}")
 
-        testImplementation("${Dependencies.JUNIT}:${Versions.JUNIT}")
-//        testImplementation("${Dependencies.JUNIT_PLATFORM_LAUNCHER}:${Versions.JUNIT_PLATFORM_LAUNCHER}")
+        testImplementation("${Dependencies.JUNIT5}:${Versions.JUNIT5}")
+        testImplementation("${Dependencies.JUNIT_PLATFORM_LAUNCHER}:${Versions.JUNIT_PLATFORM_LAUNCHER}")
+
     }
 
     tasks {

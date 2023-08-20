@@ -1,4 +1,4 @@
-package com.flab.fpay.api.pay;
+package com.flab.fpay.api.user;
 
 public class UserController {
 }

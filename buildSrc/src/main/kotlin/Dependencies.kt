@@ -12,6 +12,7 @@ object Dependencies {
     const val SPRING_BOOT_STARTER_WEB = "org.springframework.boot:spring-boot-starter-web"
     const val SPRING_BOOT_STARTER_DATA_JPA = "org.springframework.boot:spring-boot-starter-data-jpa"
     const val SPRING_BOOT_STARTER_SECURITY = "org.springframework.boot:spring-boot-starter-security"
+    const val SPRING_SECURITY_TEST = "org.springframework.security:spring-security-test"
     const val SPRING_REST_DOCS_MOCKMVC = "org.springframework.restdocs:spring-restdocs-mockmvc"
     const val SPRING_REST_DOCS_ASCIIDOCTOR = "org.springframework.restdocs:spring-restdocs-asciidoctor"
 

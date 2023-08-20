@@ -1,25 +1,26 @@
 package com.flab.fpay.common.company;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Table
-@Entity(name = "company")
+@Entity
 @Getter
 @Setter
 @ToString
+@NoArgsConstructor
 public class Company implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "company_id")
     private BigInteger companyId;
 

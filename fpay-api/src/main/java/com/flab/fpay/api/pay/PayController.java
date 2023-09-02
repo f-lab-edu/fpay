@@ -1,27 +1,26 @@
 package com.flab.fpay.api.pay;
 
-import com.flab.fpay.api.company.CompanyService;
-import com.flab.fpay.common.company.Company;
-import com.flab.fpay.common.pay.PaymentRequest;
 import com.flab.fpay.common.pay.PaymentTypeInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/payment")
-public class PayController {
+@RequiredArgsConstructor
+@RequestMapping(value = "/v1/payment")
+class PayController {
 
-    @Autowired
-    CompanyService companyService;
+    private final PaymentRequestService paymentRequestService;
 
     @PostMapping("/ready")
-    public ResponseEntity<Map> paymentReady(@RequestBody PaymentRequest paymentRequest){
-        return ResponseEntity.ok(Map.of("redirectUrl","http://test.co.kr"));
+    public ResponseEntity<PaymentRequestResDTO> paymentReady(@RequestBody PaymentRequestDTO paymentRequestDTO){
+
+        PaymentRequestResDTO paymentRequestResDTO = paymentRequestService.savePaymentRequest(paymentRequestDTO);
+
+        return ResponseEntity.ok(paymentRequestResDTO);
     }
 
     @PostMapping("/approve")

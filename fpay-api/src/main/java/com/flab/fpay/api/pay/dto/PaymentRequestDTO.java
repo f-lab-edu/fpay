@@ -1,4 +1,4 @@
-package com.flab.fpay.api.pay;
+package com.flab.fpay.api.pay.dto;
 
 import com.flab.fpay.common.company.Company;
 import com.flab.fpay.common.pay.PaymentRequest;

@@ -1,4 +1,4 @@
-package com.flab.fpay.api.pay;
+package com.flab.fpay.api.pay.repository;
 
 import com.flab.fpay.common.pay.PaymentRequest;
 import org.springframework.data.jpa.repository.JpaRepository;

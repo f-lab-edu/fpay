@@ -1,4 +1,4 @@
-package com.flab.fpay.api.pay;
+package com.flab.fpay.api.pay.dto;
 
 import lombok.AccessLevel;
 import lombok.Builder;

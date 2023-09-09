@@ -23,15 +23,9 @@ public class PaymentTypeInfo implements Serializable {
 
     @Column(name = "uid")
     private BigInteger uid;
-//    @ManyToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "uid", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-//    private User user;
 
     @Column(name = "payment_type_id")
     private BigInteger paymentTypeId;
-//    @OneToOne(fetch = FetchType.LAZY)
-//    @JoinColumn(name = "payment_type_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-//    private PaymentType paymentType;
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;

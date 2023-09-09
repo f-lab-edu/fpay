@@ -21,9 +21,12 @@ public class PayInfo implements Serializable {
     @Column(name = "pay_info_id")
     private BigInteger payInfoId;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "payment_type_info_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private PaymentTypeInfo paymentTypeInfo;
+//    @OneToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "payment_type_info_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+//    private PaymentTypeInfo paymentTypeInfo;
+
+    @Column(name = "payment_type_info_id")
+    private BigInteger paymentTypeInfoId;
 
     @Column(name = "money")
     private BigDecimal money;

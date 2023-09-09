@@ -20,24 +20,15 @@ public class PaymentRequestService {
     private final PaymentRequestRepository paymentRequestRepository;
     private final CompanyService companyService;
 
-    public PaymentRequestResDTO savePaymentRequest(PaymentRequestDTO paymentRequestDTO){
-//      코드를 최대한 적게 작성할수있도록
+    public PaymentRequestResDTO savePaymentRequest(PaymentRequestDTO paymentRequestDTO) {
         Company company = companyService.getCompanyById(paymentRequestDTO.getCompanyId());
-
         PaymentRequest paymentRequest = paymentRequestDTO.toEntity(company);
-
         PaymentRequest savePayment = paymentRequestRepository.save(paymentRequest);
-
-//        builder ( builder pattern 단점 ) 보다는 생성자로 ( Optional 한경우에만 builder )
-        return PaymentRequestResDTO.builder()
-                .paymentId(savePayment.getPaymentRequestId())
-                .redirectURL("https://test.co.kr" + "/" + savePayment.getPaymentRequestId())
-                .createAt(LocalDateTime.now())
-                .build();
+        return new PaymentRequestResDTO(savePayment.getPaymentRequestId(), "https://test.co.kr" + "/" + savePayment.getPaymentRequestId());
     }
 
     public PaymentRequest getPaymentRequestById(BigInteger id){
-        return paymentRequestRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Company not found with id: $id"));
+        return paymentRequestRepository.findById(id).orElseThrow(() -> new NoSuchElementException("PaymentRequest not found with id: $id"));
     }
 
 }

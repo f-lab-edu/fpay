@@ -34,17 +34,7 @@ public class ApproveMoney{
         payInfo.setMoney(payInfo.getMoney().subtract(paymentTransactionDTO.getProductPrice()));
         payInfoService.savePayInfo(payInfo);
 
-        return PaymentTransaction.builder()
-                .paymentPrice(paymentRequest.getPaymentPrice())
-                .paymentCompany(paymentRequest.getCompanyId())
-                .companyUserId(paymentTransactionDTO.getCompanyUserId())
-                .companyOrderNumber(paymentTransactionDTO.getCompanyOrderNumber())
-                .uid(paymentTransactionDTO.getUid())
-                .paymentTypeInfoId(paymentTypeInfo.getPaymentTypeInfoId())
-                .paymentRequestId(paymentRequest.getPaymentRequestId())
-                .paymentStatus(SUCCESS)
-                .paymentAt(LocalDateTime.now())
-                .build();
+        return paymentTransactionDTO.toEntity(paymentRequest, paymentTypeInfo);
     }
 
 }

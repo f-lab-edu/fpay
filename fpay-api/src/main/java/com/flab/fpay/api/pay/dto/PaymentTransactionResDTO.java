@@ -1,5 +1,7 @@
 package com.flab.fpay.api.pay.dto;
 
+import com.flab.fpay.common.pay.PaymentRequest;
+import com.flab.fpay.common.pay.PaymentTransaction;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,5 +36,18 @@ public class PaymentTransactionResDTO {
     private LocalDateTime createAt;
 
     private LocalDateTime paymentAt;
+
+    public PaymentTransactionResDTO(PaymentTransaction paymentTransaction, PaymentRequest paymentRequest){
+        this.paymentId = paymentTransaction.getPaymentRequestId();
+        this.companyId = paymentTransaction.getPaymentCompany();
+        this.companyOrderNumber = paymentTransaction.getCompanyOrderNumber();
+        this.companyUserId = paymentTransaction.getCompanyUserId();
+        this.paymentType = paymentRequest.getPaymentType();
+        this.productPrice = paymentTransaction.getPaymentPrice();
+        this.productName = paymentRequest.getProductName();
+        this.productCount = paymentRequest.getProductCount();
+        this.createAt = paymentTransaction.getCreatedAt();
+        this.paymentAt = paymentTransaction.getPaymentAt();
+    }
 
 }

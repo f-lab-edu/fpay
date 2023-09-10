@@ -32,20 +32,9 @@ public class PaymentTransactionService {
             paymentTransaction = approveMoney.approve(paymentTransactionDTO, paymentRequest);
         }
 
-        paymentTransactionRepository.save(paymentTransaction);
+        if(paymentTransaction != null) paymentTransactionRepository.save(paymentTransaction);
 
-        return PaymentTransactionResDTO.builder()
-                .paymentId(paymentTransaction.getPaymentRequestId())
-                .companyId(paymentTransaction.getPaymentCompany())
-                .companyOrderNumber(paymentTransaction.getCompanyOrderNumber())
-                .companyUserId(paymentTransaction.getCompanyUserId())
-                .paymentType(paymentRequest.getPaymentType())
-                .productPrice(paymentTransaction.getPaymentPrice())
-                .productName(paymentRequest.getProductName())
-                .productCount(paymentRequest.getProductCount())
-                .createAt(paymentTransaction.getCreatedAt())
-                .paymentAt(paymentTransaction.getPaymentAt())
-                .build();
+        return new PaymentTransactionResDTO(paymentTransaction, paymentRequest);
     }
 
 

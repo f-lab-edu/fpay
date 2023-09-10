@@ -1,17 +1,20 @@
 package com.flab.fpay.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.flab.fpay.api.pay.PaymentRequestDTO;
-import com.flab.fpay.api.pay.PaymentRequestResDTO;
-import com.flab.fpay.api.pay.PaymentRequestService;
+import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
+import com.flab.fpay.api.pay.dto.PaymentRequestResDTO;
+import com.flab.fpay.api.pay.dto.PaymentTransactionDTO;
+import com.flab.fpay.api.pay.dto.PaymentTransactionResDTO;
+import com.flab.fpay.api.pay.service.PaymentRequestService;
+import com.flab.fpay.api.pay.service.PaymentTransactionService;
 import com.flab.fpay.common.company.Company;
 import com.flab.fpay.api.company.CompanyService;
 import com.flab.fpay.common.pay.PaymentRequest;
+import com.flab.fpay.common.pay.PaymentTransaction;
 import com.flab.fpay.common.pay.PaymentType;
 import com.flab.fpay.common.pay.PaymentTypeInfo;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-//import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -49,26 +52,16 @@ public class PayMentDocumentTest {
     @MockBean
     private PaymentRequestService paymentRequestService;
 
-    private PaymentRequest paymentRequest;
+    @MockBean
+    private PaymentTransactionService paymentTransactionService;
 
     private PaymentRequestDTO paymentRequestDTO;
 
-    private PaymentRequestResDTO paymentRequestResDTO;
+    private PaymentTransactionDTO paymentTransactionDTO;
 
-//    {
-//        "companyId": 1,
-//            "companyOrderNumber": "EB0010",
-//            "companyUserId":"baebull70",
-//            "productName": "다이슨 청소기",
-//            "productCount": 1,
-//            "productPrice": 10000,
-//            "paymentType": "MONEY",
-//            "requestAt": "2023-09-03T04:32:14.729311"
-//    }
+
     @BeforeEach
     void setUp() {
-
-
 //        postRequest = PostRequest.builder()
 //                .title("노트북 맥북 프로 16인치 판매합니다.")
 //                .content("노트북을 파는 글")
@@ -99,11 +92,8 @@ public class PayMentDocumentTest {
                 .build();
 
         when(paymentRequestService.savePaymentRequest(any())).thenReturn(
-                PaymentRequestResDTO.builder()
-                .paymentId(BigInteger.valueOf(1))
-                .redirectURL("https://test.co.kr")
-                .createAt(LocalDateTime.now())
-                .build());
+                new PaymentRequestResDTO(BigInteger.valueOf(1), "https://test.co.rk")
+        );
 
         String requestJson = objectMapper.writeValueAsString(paymentRequestDTO);
 
@@ -132,32 +122,39 @@ public class PayMentDocumentTest {
 
     }
 
-    @DisplayName("결제 요청")
+    @DisplayName("결제 승인")
     @Test
     public void approve_payment() throws Exception {
 
-        // find paymentType
-        PaymentType paymentType = new PaymentType();
-        paymentType.setPaymentTypeId(BigInteger.valueOf(1));
-        paymentType.setPaymentType("money");
+        paymentTransactionDTO = PaymentTransactionDTO.builder()
+                .paymentId(BigInteger.valueOf(1))
+                .companyId(BigInteger.valueOf(1))
+                .companyOrderNumber("EB0010")
+                .productPrice(BigDecimal.valueOf(780000))
+                .uid(BigInteger.valueOf(1))
+                .build();
 
-        // find paymentTypeInfo
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setPaymentRequestId(BigInteger.valueOf(1));
+        paymentRequest.setCompanyId(BigInteger.valueOf(1));
+        paymentRequest.setCompanyUserId("baebull70");
+        paymentRequest.setProductName("다이슨 청소기");
+        paymentRequest.setPaymentPrice(BigDecimal.valueOf(10000));
+        paymentRequest.setProductCount(1);
+        paymentRequest.setPaymentType("MONEY");
+
         PaymentTypeInfo paymentTypeInfo = new PaymentTypeInfo();
         paymentTypeInfo.setPaymentTypeInfoId(BigInteger.valueOf(1));
-        paymentTypeInfo.setPaymentTypeId(paymentType.getPaymentTypeId());
+        paymentTypeInfo.setPaymentTypeId(BigInteger.valueOf(1));
         paymentTypeInfo.setUid(BigInteger.valueOf(1));
         paymentTypeInfo.setCreatedAt(LocalDateTime.now());
         paymentTypeInfo.setUpdatedAt(LocalDateTime.now());
 
-//        PaymentTransaction paymentTransaction = new PaymentTransaction();
-//        paymentTransaction.setPaymentTransactionId(BigInteger.valueOf(1));
-//        paymentTransaction.setPaymentPrice(BigDecimal.valueOf(28900));
-//        paymentTransaction.setUid(paymentTypeInfo.getUid());
-//        paymentTransaction.setPaymentTypeInfoId(paymentTypeInfo.getPaymentTypeInfoId());
-//        paymentTransaction.setProductId(BigInteger.valueOf(1));
-//        paymentType.setPaymentType();
+        PaymentTransaction paymentTransaction = paymentTransactionDTO.toEntity(paymentRequest,paymentTypeInfo);
 
-        String requestJson = objectMapper.writeValueAsString(paymentTypeInfo);
+        when(paymentTransactionService.approvePayment(any())).thenReturn(new PaymentTransactionResDTO(paymentTransaction, paymentRequest));
+
+        String requestJson = objectMapper.writeValueAsString(paymentTransactionDTO);
 
         this.mockMvc.perform(MockMvcRequestBuilders.post("/v1/payment/approve")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -167,18 +164,25 @@ public class PayMentDocumentTest {
                 .andDo(MockMvcResultHandlers.print())
                 .andDo(document("payment/approve",
                         requestFields(
-                                fieldWithPath("paymentTypeInfoId").description("결제 타입 정보 ID").ignored(),
-                                fieldWithPath("paymentTypeId").description("결제 타입 ID"),
-                                fieldWithPath("uid").description("고객 ID"),
-                                fieldWithPath("createdAt").description("생성일").ignored(),
-                                fieldWithPath("updatedAt").description("수정일").ignored()
+                                fieldWithPath("paymentId").description("결제 번호"),
+                                fieldWithPath("companyId").description("가맹점ID"),
+                                fieldWithPath("companyOrderNumber").description("가맹점 주문번호"),
+                                fieldWithPath("companyUserId").description("가맹점 UserId"),
+                                fieldWithPath("productPrice").description("상품 금액 ( 총액 )"),
+                                fieldWithPath("uid").description("페이 UID")
                         ),
                         responseFields(
-                                fieldWithPath("result").description("결제 결과")
+                                fieldWithPath("paymentId").description("결제 번호"),
+                                fieldWithPath("companyId").description("가맹점ID"),
+                                fieldWithPath("companyOrderNumber").description("가맹점 주문번호"),
+                                fieldWithPath("companyUserId").description("가맹점 UserId"),
+                                fieldWithPath("paymentType").description("결제 타입"),
+                                fieldWithPath("productPrice").description("상품 금액 ( 총액 )"),
+                                fieldWithPath("productName").description("주문 상품명"),
+                                fieldWithPath("productCount").description("주문 수량"),
+                                fieldWithPath("createAt").description("생성일"),
+                                fieldWithPath("paymentAt").description("승인일")
                         )));
-//                .andDo(document("payment/approve-payment",
-//                        Preprocessors.preprocessRequest(prettyPrint()),
-//                        Preprocessors.preprocessResponse(prettyPrint())));
     }
 
 }

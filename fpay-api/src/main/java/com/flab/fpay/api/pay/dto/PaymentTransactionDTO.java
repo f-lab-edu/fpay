@@ -13,6 +13,7 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaymentTransactionDTO {

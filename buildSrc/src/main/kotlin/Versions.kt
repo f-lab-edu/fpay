@@ -7,4 +7,5 @@ object Versions {
     const val JUNIT_PLATFORM_LAUNCHER = "1.5.2"
     const val JDBC_MYSQL = "8.0.27"
     const val ASCIIDOCTOR = "3.3.2"
+    const val REDISSON = "3.19.1"
 }

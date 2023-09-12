@@ -2,6 +2,7 @@ object Dependencies {
 
     const val LOMBOK = "org.projectlombok:lombok"
     const val JDBC_MYSQL = "mysql:mysql-connector-java"
+    const val REDISSON = "org.redisson:redisson-spring-boot-starter"
 
 //    const val JUNIT = "junit:junit"
     const val JUNIT_PLATFORM_LAUNCHER = "org.junit.platform:junit-platform-launcher"

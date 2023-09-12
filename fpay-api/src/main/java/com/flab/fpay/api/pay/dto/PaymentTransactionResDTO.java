@@ -46,7 +46,7 @@ public class PaymentTransactionResDTO {
         this.productPrice = paymentTransaction.getPaymentPrice();
         this.productName = paymentRequest.getProductName();
         this.productCount = paymentRequest.getProductCount();
-        this.createAt = paymentTransaction.getCreatedAt();
+        this.createAt = LocalDateTime.now();
         this.paymentAt = paymentTransaction.getPaymentAt();
     }
 

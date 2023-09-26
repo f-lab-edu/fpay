@@ -14,12 +14,14 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User getUserById(BigInteger id){
-        return userRepository.findById(id).orElseThrow(() -> new NoSuchElementException("User not found with id: $id"));
+    public User getUserById(BigInteger id) {
+        return userRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("User not found with id: $id"));
     }
 
-    public User getUserByUserId (String userId){
-        return userRepository.findByUserId(userId).orElseThrow(() -> new NoSuchElementException("User not found with user_id: $userId"));
+    public User getUserByUserId(String userId) {
+        return userRepository.findByUserId(userId)
+            .orElseThrow(() -> new NoSuchElementException("User not found with user_id: $userId"));
     }
 
 }

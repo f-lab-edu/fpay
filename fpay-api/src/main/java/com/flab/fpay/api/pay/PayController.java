@@ -19,17 +19,21 @@ class PayController {
     private final PaymentTransactionService paymentTransactionService;
 
     @PostMapping("/ready")
-    public ResponseEntity<PaymentRequestResDTO> paymentReady(@RequestBody PaymentRequestDTO paymentRequestDTO){
+    public ResponseEntity<PaymentRequestResDTO> paymentReady(
+        @RequestBody PaymentRequestDTO paymentRequestDTO) {
 
-        PaymentRequestResDTO paymentRequestResDTO = paymentRequestService.savePaymentRequest(paymentRequestDTO);
+        PaymentRequestResDTO paymentRequestResDTO = paymentRequestService.savePaymentRequest(
+            paymentRequestDTO);
 
         return ResponseEntity.ok(paymentRequestResDTO);
     }
 
     @PostMapping("/approve")
-    public ResponseEntity<PaymentTransactionResDTO> paymentApprove(@RequestBody PaymentTransactionDTO paymentTransactionDTO){
+    public ResponseEntity<PaymentTransactionResDTO> paymentApprove(
+        @RequestBody PaymentTransactionDTO paymentTransactionDTO) {
 
-        PaymentTransactionResDTO paymentTransactionResDTO = paymentTransactionService.approvePayment(paymentTransactionDTO);
+        PaymentTransactionResDTO paymentTransactionResDTO = paymentTransactionService.approvePayment(
+            paymentTransactionDTO);
 
         return ResponseEntity.ok(paymentTransactionResDTO);
     }

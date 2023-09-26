@@ -15,8 +15,9 @@ public class PaymentTypeInfoService {
 
     private final PaymentTypeInfoRepository paymentTypeInfoRepository;
 
-    public PaymentTypeInfo getPaymentTypeInfoByUid(BigInteger uid){
-        return paymentTypeInfoRepository.findPaymentTypeInfoByUid(uid).orElseThrow(() -> new NoSuchElementException("PaymentTypeInfo not found with uid: $id"));
+    public PaymentTypeInfo getPaymentTypeInfoByUid(BigInteger uid) {
+        return paymentTypeInfoRepository.findPaymentTypeInfoByUid(uid).orElseThrow(
+            () -> new NoSuchElementException("PaymentTypeInfo not found with uid: $id"));
     }
 
 }

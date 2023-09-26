@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 
 @Service
@@ -24,11 +23,13 @@ public class PaymentRequestService {
         Company company = companyService.getCompanyById(paymentRequestDTO.getCompanyId());
         PaymentRequest paymentRequest = paymentRequestDTO.toEntity(company);
         PaymentRequest savePayment = paymentRequestRepository.save(paymentRequest);
-        return new PaymentRequestResDTO(savePayment.getPaymentRequestId(), "https://test.co.kr" + "/" + savePayment.getPaymentRequestId());
+        return new PaymentRequestResDTO(savePayment.getPaymentRequestId(),
+            "https://test.co.kr" + "/" + savePayment.getPaymentRequestId());
     }
 
-    public PaymentRequest getPaymentRequestById(BigInteger id){
-        return paymentRequestRepository.findById(id).orElseThrow(() -> new NoSuchElementException("PaymentRequest not found with id: $id"));
+    public PaymentRequest getPaymentRequestById(BigInteger id) {
+        return paymentRequestRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("PaymentRequest not found with id: $id"));
     }
 
 }

@@ -15,12 +15,13 @@ public class CompanyService {
     @Autowired
     CompanyRepository companyRepository;
 
-    public Company saveCompany(Company entity){
+    public Company saveCompany(Company entity) {
         return companyRepository.save(entity);
     }
 
-    public Company getCompanyById(BigInteger id){
-        return companyRepository.findById(id).orElseThrow(() -> new NoSuchElementException("Company not found with id: $id"));
+    public Company getCompanyById(BigInteger id) {
+        return companyRepository.findById(id)
+            .orElseThrow(() -> new NoSuchElementException("Company not found with id: $id"));
     }
 
 }

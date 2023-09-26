@@ -1,7 +1,9 @@
 package com.flab.fpay.common.pay;
 
 import com.flab.fpay.common.user.User;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -15,6 +17,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 public class PaymentTypeInfo implements Serializable {
 
     @Id

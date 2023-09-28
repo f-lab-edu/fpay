@@ -1,12 +1,14 @@
 package com.flab.fpay.api.pay;
 
-import com.flab.fpay.common.pay.PaymentTypeInfo;
+import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
+import com.flab.fpay.api.pay.dto.PaymentRequestResDTO;
+import com.flab.fpay.api.pay.dto.PaymentTransactionDTO;
+import com.flab.fpay.api.pay.dto.PaymentTransactionResDTO;
+import com.flab.fpay.api.pay.service.PaymentRequestService;
+import com.flab.fpay.api.pay.service.PaymentTransactionService;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -14,18 +16,26 @@ import java.util.Map;
 class PayController {
 
     private final PaymentRequestService paymentRequestService;
+    private final PaymentTransactionService paymentTransactionService;
 
     @PostMapping("/ready")
-    public ResponseEntity<PaymentRequestResDTO> paymentReady(@RequestBody PaymentRequestDTO paymentRequestDTO){
+    public ResponseEntity<PaymentRequestResDTO> paymentReady(
+        @RequestBody PaymentRequestDTO paymentRequestDTO) {
 
-        PaymentRequestResDTO paymentRequestResDTO = paymentRequestService.savePaymentRequest(paymentRequestDTO);
+        PaymentRequestResDTO paymentRequestResDTO = paymentRequestService.savePaymentRequest(
+            paymentRequestDTO);
 
         return ResponseEntity.ok(paymentRequestResDTO);
     }
 
     @PostMapping("/approve")
-    public ResponseEntity<Map> paymentApprove(PaymentTypeInfo paymentTypeInfo){
-        return ResponseEntity.ok(Map.of("result","success"));
+    public ResponseEntity<PaymentTransactionResDTO> paymentApprove(
+        @RequestBody PaymentTransactionDTO paymentTransactionDTO) {
+
+        PaymentTransactionResDTO paymentTransactionResDTO = paymentTransactionService.approvePayment(
+            paymentTransactionDTO);
+
+        return ResponseEntity.ok(paymentTransactionResDTO);
     }
 
 }

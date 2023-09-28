@@ -6,6 +6,9 @@ spring:
     url: jdbc:mysql://fpay-db.mysql.database.azure.com:3306/fpay
     username: fuser
     password: fpay1234!@
+  redis:
+    host: 127.0.0.1
+    port: 6379
   jpa:
     open-in-view: false
     hibernate:
@@ -14,3 +17,6 @@ spring:
     properties:
       hibernate.dialect: org.hibernate.dialect.MySQL5InnoDBDialect
     show-sql: true
+  logging:
+    level:
+      root: debug

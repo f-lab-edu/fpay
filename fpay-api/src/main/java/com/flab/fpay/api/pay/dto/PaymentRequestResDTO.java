@@ -19,10 +19,10 @@ public class PaymentRequestResDTO {
     private LocalDateTime createAt;
 
     @Builder
-    public PaymentRequestResDTO(BigInteger paymentId, String redirectURL, LocalDateTime createAt){
+    public PaymentRequestResDTO(BigInteger paymentId, String redirectURL){
         this.paymentId = paymentId;
         this.redirectURL = redirectURL;
-        this.createAt = createAt;
+        this.createAt = LocalDateTime.now();
     }
 
 }

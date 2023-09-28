@@ -18,11 +18,10 @@ include::{snippets}/payment/request-payment/request-fields.adoc[]
 include::{snippets}/payment/request-payment/http-response.adoc[]
 include::{snippets}/payment/request-payment/response-fields.adoc[]
 
-== 결제 요청
+== 결제 승인
 
 === 요청
 
-//include::{snippets}/post-inquiry/http-request.adoc[]
 include::{snippets}/payment/approve/http-request.adoc[]
 include::{snippets}/payment/approve/request-fields.adoc[]
 

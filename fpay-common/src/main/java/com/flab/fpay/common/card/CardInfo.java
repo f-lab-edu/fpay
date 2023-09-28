@@ -1,5 +1,6 @@
 package com.flab.fpay.common.card;
 
+import com.flab.fpay.common.BaseTimeEntity;
 import com.flab.fpay.common.pay.PaymentTypeInfo;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @ToString
-public class CardInfo implements Serializable {
+public class CardInfo extends BaseTimeEntity {
 
     @Id
     @Column(name = "card_info_id")
@@ -31,11 +32,5 @@ public class CardInfo implements Serializable {
 
     @Column(name = "card_number")
     private String cardNumber;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
 }

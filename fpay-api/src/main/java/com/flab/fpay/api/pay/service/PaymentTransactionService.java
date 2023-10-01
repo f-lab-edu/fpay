@@ -1,11 +1,17 @@
 package com.flab.fpay.api.pay.service;
 
+import com.flab.fpay.api.enums.ApproveStatus;
 import com.flab.fpay.api.pay.approve.ApproveMoney;
+import com.flab.fpay.api.pay.dto.PaymentCancelRequestDTO;
+import com.flab.fpay.api.pay.dto.PaymentCancelResponseDTO;
 import com.flab.fpay.api.pay.dto.PaymentTransactionDTO;
 import com.flab.fpay.api.pay.dto.PaymentTransactionResDTO;
 import com.flab.fpay.api.pay.repository.PaymentTransactionRepository;
 import com.flab.fpay.common.pay.PaymentRequest;
 import com.flab.fpay.common.pay.PaymentTransaction;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
@@ -27,21 +33,29 @@ public class PaymentTransactionService {
     private final ApproveMoney approveMoney;
     private final RedissonClient redissonClient;
 
+    public boolean findPaymentApproveId(BigInteger paymentRequestId) {
+        return paymentTransactionRepository
+            .findPaymentTransactionByPaymentRequestId(paymentRequestId)
+            .isPresent();
+    }
 
     public PaymentTransactionResDTO approvePayment(PaymentTransactionDTO paymentTransactionDTO) {
+
+        if (findPaymentApproveId(paymentTransactionDTO.getPaymentId())) {
+            throw new RuntimeException("이미 결제가 완료된 건 입니다.");
+        }
+
         RLock lock = redissonClient.getLock("approveTemp:" + paymentTransactionDTO.getPaymentId());
         boolean available = false;
         try {
             available = lock.tryLock(0, 3, TimeUnit.SECONDS);
-//            lock 해제를 무조건 진행 할 수 있게하는 방법
 
             if (!available) {
-                throw new RuntimeException("lock 획득 실패");
+                throw new RuntimeException("같은 결제건이 현재 결제 진행중 입니다.");
             }
 
-            log.info("결제 승인 처리중", paymentTransactionDTO.getPaymentId().toString());
             PaymentRequest paymentRequest = paymentRequestService.getPaymentRequestById(
-                paymentTransactionDTO.getPaymentId()); //      결제 요청 ( ready step ) 단계에서 저장된 데이터 불러오기
+                paymentTransactionDTO.getPaymentId());
             PaymentTransaction paymentTransaction = null;
 
             if (!paymentTransactionDTO.getCompanyOrderNumber()
@@ -54,20 +68,57 @@ public class PaymentTransactionService {
 
             if (paymentRequest.getPaymentType().equals("MONEY")) {
                 paymentTransaction = approveMoney.approve(paymentTransactionDTO, paymentRequest);
+                paymentTransaction.setPaymentStatus(ApproveStatus.SUCCESS.getValue());
             }
 
             paymentTransactionRepository.save(paymentTransaction);
-            log.info("결제 승인 완료", paymentTransactionDTO.getPaymentId().toString());
 
             return new PaymentTransactionResDTO(paymentTransaction, paymentRequest);
         } catch (IllegalStateException | InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
-            if (available) { // 락을 획득했을 때만 unlock 수행
-                log.info("(unlock 수행)");
+            if (available) {
                 lock.unlock();
             }
         }
     }
+
+    public PaymentCancelResponseDTO cancelPayment(PaymentCancelRequestDTO paymentCancelRequestDTO) {
+        PaymentCancelResponseDTO paymentCancelResponseDTO = null;
+
+        // 승인된 금액이 취소요청한 금액만큼 존재하는지 체크
+        PaymentTransaction paymentTransaction = paymentTransactionRepository
+            .findPaymentTransactionByPaymentRequestId(
+                paymentCancelRequestDTO.getPaymentId())
+            .orElseThrow(() -> new NoSuchElementException("취소요청하신 결제건이 존재하지 않습니다."));
+
+        if (paymentTransaction.getPaymentStatus() == ApproveStatus.CANCEL.getValue()){
+            throw new RuntimeException("이미 결제취소 완료된 건 입니다.");
+        }
+
+        if (paymentCancelRequestDTO.getProductPrice()
+            .compareTo(paymentTransaction.getPaymentPrice()) > 0) {
+            throw new RuntimeException("승인된 금액이 취소요청 금액 보다 적습니다.");
+        }
+
+        // 결제 취소 진행 후 기존 건 update
+        // 만약 승인 금액이 0원이 되면 완전 취소로 가정 or 아닌경우 부분취소
+        BigDecimal paymentPrice = paymentTransaction.getPaymentPrice()
+            .subtract(paymentCancelRequestDTO.getProductPrice());
+        if (paymentPrice.compareTo(BigDecimal.ZERO) == 0) {
+            paymentTransaction.setPaymentStatus(ApproveStatus.CANCEL.getValue());
+        }
+        paymentTransaction.setPaymentPrice(paymentPrice);
+        PaymentTransaction saveTransaction = paymentTransactionRepository.save(
+            paymentTransaction);
+
+        paymentCancelResponseDTO = new PaymentCancelResponseDTO(saveTransaction,
+            paymentCancelRequestDTO);
+
+        log.info(paymentCancelResponseDTO.toString());
+
+        return paymentCancelResponseDTO;
+    }
+
 
 }

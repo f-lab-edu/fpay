@@ -1,5 +1,7 @@
 package com.flab.fpay.api.pay;
 
+import com.flab.fpay.api.pay.dto.PaymentCancelRequestDTO;
+import com.flab.fpay.api.pay.dto.PaymentCancelResponseDTO;
 import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
 import com.flab.fpay.api.pay.dto.PaymentRequestResDTO;
 import com.flab.fpay.api.pay.dto.PaymentTransactionDTO;
@@ -36,6 +38,16 @@ class PayController {
             paymentTransactionDTO);
 
         return ResponseEntity.ok(paymentTransactionResDTO);
+    }
+
+    @PostMapping("/cancel")
+    public ResponseEntity<PaymentCancelResponseDTO> paymentCancel(
+        @RequestBody PaymentCancelRequestDTO paymentCancelRequestDTO) {
+
+        PaymentCancelResponseDTO paymentCancelResponseDTO = paymentTransactionService.cancelPayment(
+            paymentCancelRequestDTO);
+
+        return ResponseEntity.ok(paymentCancelResponseDTO);
     }
 
 }

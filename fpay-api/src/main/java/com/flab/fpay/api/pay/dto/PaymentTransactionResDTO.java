@@ -10,12 +10,14 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import lombok.Setter;
 
 @Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentTransactionResDTO {
+public class PaymentTransactionResDTO extends BaseResponseDTO{
 
     private BigInteger paymentId; // 결제 ID
 

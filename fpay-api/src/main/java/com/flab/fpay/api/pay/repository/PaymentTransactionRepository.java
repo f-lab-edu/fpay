@@ -8,6 +8,4 @@ import java.math.BigInteger;
 
 public interface PaymentTransactionRepository extends JpaRepository<PaymentTransaction, BigInteger> {
 
-    Optional<PaymentTransaction> findPaymentTransactionByPaymentRequestId(BigInteger paymentRequestId);
-
 }

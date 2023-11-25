@@ -1,5 +1,6 @@
 package com.flab.fpay.api.pay.dto;
 
+import com.flab.fpay.common.pay.Payment;
 import com.flab.fpay.common.pay.PaymentTransaction;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -32,15 +33,15 @@ public class PaymentCancelResponseDTO extends BaseResponseDTO {
 
     private LocalDateTime cancelAt;
 
-    public PaymentCancelResponseDTO(PaymentTransaction paymentTransaction, PaymentCancelRequestDTO paymentCancelRequestDTO){
-        this.paymentId = paymentTransaction.getPaymentRequestId();
-        this.companyId = paymentTransaction.getPaymentCompany();
-        this.companyOrderNumber = paymentTransaction.getCompanyOrderNumber();
-        this.companyUserId = paymentTransaction.getCompanyUserId();
+    public PaymentCancelResponseDTO(Payment payment, PaymentCancelRequestDTO paymentCancelRequestDTO){
+        this.paymentId = payment.getPaymentRequestId();
+        this.companyId = payment.getPaymentCompany();
+        this.companyOrderNumber = payment.getCompanyOrderNumber();
+        this.companyUserId = payment.getCompanyUserId();
         this.cancelPrice = paymentCancelRequestDTO.getProductPrice();
-        this.remainingPrice = paymentTransaction.getPaymentPrice();
+        this.remainingPrice = payment.getPaymentPrice();
         this.createAt = LocalDateTime.now();
-        this.cancelAt = paymentTransaction.getPaymentAt();
+        this.cancelAt = payment.getPaymentAt();
     }
 
 }

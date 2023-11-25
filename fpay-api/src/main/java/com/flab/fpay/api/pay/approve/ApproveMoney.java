@@ -1,8 +1,10 @@
 package com.flab.fpay.api.pay.approve;
 
+import com.flab.fpay.api.pay.dto.PaymentDTO;
 import com.flab.fpay.api.pay.dto.PaymentTransactionDTO;
 import com.flab.fpay.api.pay.service.PayInfoService;
 import com.flab.fpay.api.pay.service.PaymentTypeInfoService;
+import com.flab.fpay.common.pay.Payment;
 import com.flab.fpay.common.pay.PaymentRequest;
 import com.flab.fpay.common.pay.PaymentTransaction;
 import java.util.NoSuchElementException;
@@ -17,15 +19,15 @@ public class ApproveMoney {
     private final PayInfoService payInfoService;
     private final PaymentTypeInfoService paymentTypeInfoService;
 
-    public PaymentTransaction approve(PaymentTransactionDTO paymentTransactionDTO,
+    public Payment approve(PaymentDTO paymentDTO,
         PaymentRequest paymentRequest) {
 
         return Optional.of(
-                paymentTypeInfoService.getPaymentTypeInfoByUid(paymentTransactionDTO.getUid()))
+                paymentTypeInfoService.getPaymentTypeInfoByUid(paymentDTO.getUid()))
             .map(paymentTypeInfo -> payInfoService.getPayInfoByPaymentTypeInfoId(
                 paymentTypeInfo.getPaymentTypeInfoId()))
             .map(payInfoService::savePayInfo)
-            .map(payInfo -> paymentTransactionDTO.toEntity(paymentRequest, payInfo))
+            .map(payInfo -> paymentDTO.toEntity(paymentRequest, payInfo))
             .orElseThrow(() -> new NoSuchElementException("결제에 실패하였습니다."));
     }
 

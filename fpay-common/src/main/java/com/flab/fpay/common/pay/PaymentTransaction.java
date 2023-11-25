@@ -43,6 +43,9 @@ public class PaymentTransaction extends BaseTimeEntity {
     @Column(name = "payment_type_info_id")
     private BigInteger paymentTypeInfoId;
 
+    @Column(name = "payment_id")
+    private BigInteger paymentId;
+
     @Column(name = "payment_request_id")
     private BigInteger paymentRequestId;
 
@@ -51,11 +54,5 @@ public class PaymentTransaction extends BaseTimeEntity {
 
     @Column(name = "payment_at")
     private LocalDateTime paymentAt;
-
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
 
 }

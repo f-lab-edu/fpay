@@ -1,6 +1,7 @@
 package com.flab.fpay.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.flab.fpay.api.pay.approve.ApproveMoney;
 import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
 import com.flab.fpay.api.pay.dto.PaymentRequestResDTO;
 import com.flab.fpay.api.pay.dto.PaymentTransactionDTO;
@@ -54,6 +55,9 @@ public class PayMentDocumentTest {
 
     @MockBean
     private PaymentTransactionService paymentTransactionService;
+
+    @MockBean
+    private ApproveMoney approveMoney;
 
     private PaymentRequestDTO paymentRequestDTO;
 
@@ -150,7 +154,7 @@ public class PayMentDocumentTest {
         paymentTypeInfo.setCreatedAt(LocalDateTime.now());
         paymentTypeInfo.setUpdatedAt(LocalDateTime.now());
 
-        PaymentTransaction paymentTransaction = paymentTransactionDTO.toEntity(paymentRequest,paymentTypeInfo);
+        PaymentTransaction paymentTransaction = approveMoney.approve(paymentTransactionDTO, paymentRequest);
 
         when(paymentTransactionService.approvePayment(any())).thenReturn(new PaymentTransactionResDTO(paymentTransaction, paymentRequest));
 

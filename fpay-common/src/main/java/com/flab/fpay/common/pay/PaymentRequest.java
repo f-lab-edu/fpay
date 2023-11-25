@@ -1,6 +1,7 @@
 package com.flab.fpay.common.pay;
 
 import com.flab.fpay.common.BaseTimeEntity;
+import com.flab.fpay.common.company.Company;
 import lombok.*;
 
 import javax.persistence.*;
@@ -47,4 +48,13 @@ public class PaymentRequest extends BaseTimeEntity {
     @Column(name = "request_at")
     private LocalDateTime requestAt;
 
+    public PaymentTransaction toPaymentTransaction(){
+        return PaymentTransaction.builder()
+            .paymentRequestId(this.paymentRequestId)
+            .paymentCompany(this.companyId)
+            .companyOrderNumber(this.companyOrderNumber)
+            .paymentPrice(this.paymentPrice)
+            .companyUserId(this.companyUserId)
+            .build();
+    }
 }

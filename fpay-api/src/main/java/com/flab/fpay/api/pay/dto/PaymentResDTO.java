@@ -1,15 +1,15 @@
 package com.flab.fpay.api.pay.dto;
 
+import com.flab.fpay.common.pay.Payment;
 import com.flab.fpay.common.pay.PaymentRequest;
 import com.flab.fpay.common.pay.PaymentTransaction;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.time.LocalDateTime;
 import lombok.Setter;
 
 @Builder
@@ -17,11 +17,13 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentTransactionResDTO extends BaseResponseDTO{
+public class PaymentResDTO extends BaseResponseDTO{
 
     private BigInteger paymentId; // 결제 ID
 
     private BigInteger companyId; // 가맹점 ID
+
+    private BigInteger paymentRequestId; // 결제승인 요청 ID
 
     private String companyOrderNumber; // 가맹점 주문번호
 
@@ -39,17 +41,17 @@ public class PaymentTransactionResDTO extends BaseResponseDTO{
 
     private LocalDateTime paymentAt;
 
-    public PaymentTransactionResDTO(PaymentTransaction paymentTransaction, PaymentRequest paymentRequest){
-        this.paymentId = paymentTransaction.getPaymentRequestId();
-        this.companyId = paymentTransaction.getPaymentCompany();
-        this.companyOrderNumber = paymentTransaction.getCompanyOrderNumber();
-        this.companyUserId = paymentTransaction.getCompanyUserId();
+    public PaymentResDTO(Payment payment, PaymentRequest paymentRequest){
+        this.paymentId = payment.getPaymentId();
+        this.companyId = payment.getPaymentCompany();
+        this.companyOrderNumber = payment.getCompanyOrderNumber();
+        this.companyUserId = payment.getCompanyUserId();
         this.paymentType = paymentRequest.getPaymentType();
-        this.productPrice = paymentTransaction.getPaymentPrice();
+        this.productPrice = payment.getPaymentPrice();
         this.productName = paymentRequest.getProductName();
         this.productCount = paymentRequest.getProductCount();
-        this.createAt = LocalDateTime.now();
-        this.paymentAt = paymentTransaction.getPaymentAt();
+        this.createAt = payment.getCreatedAt();
+        this.paymentAt = payment.getPaymentAt();
     }
 
 }

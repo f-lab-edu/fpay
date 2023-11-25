@@ -23,6 +23,8 @@ public class PaymentResDTO extends BaseResponseDTO{
 
     private BigInteger companyId; // 가맹점 ID
 
+    private BigInteger paymentRequestId; // 결제승인 요청 ID
+
     private String companyOrderNumber; // 가맹점 주문번호
 
     private String companyUserId; // 가맹점 User Id
@@ -40,7 +42,7 @@ public class PaymentResDTO extends BaseResponseDTO{
     private LocalDateTime paymentAt;
 
     public PaymentResDTO(Payment payment, PaymentRequest paymentRequest){
-        this.paymentId = payment.getPaymentRequestId();
+        this.paymentId = payment.getPaymentId();
         this.companyId = payment.getPaymentCompany();
         this.companyOrderNumber = payment.getCompanyOrderNumber();
         this.companyUserId = payment.getCompanyUserId();
@@ -48,7 +50,7 @@ public class PaymentResDTO extends BaseResponseDTO{
         this.productPrice = payment.getPaymentPrice();
         this.productName = paymentRequest.getProductName();
         this.productCount = paymentRequest.getProductCount();
-        this.createAt = LocalDateTime.now();
+        this.createAt = payment.getCreatedAt();
         this.paymentAt = payment.getPaymentAt();
     }
 

@@ -3,8 +3,10 @@ package com.flab.fpay.api.pay.dto;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class PaymentCancelRequestDTO extends BaseResponseDTO {
 
     private BigInteger paymentId; // 결제 ID

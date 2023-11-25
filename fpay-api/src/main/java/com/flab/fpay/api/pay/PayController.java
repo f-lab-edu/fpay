@@ -2,12 +2,12 @@ package com.flab.fpay.api.pay;
 
 import com.flab.fpay.api.pay.dto.PaymentCancelRequestDTO;
 import com.flab.fpay.api.pay.dto.PaymentCancelResponseDTO;
+import com.flab.fpay.api.pay.dto.PaymentDTO;
 import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
 import com.flab.fpay.api.pay.dto.PaymentRequestResDTO;
-import com.flab.fpay.api.pay.dto.PaymentTransactionDTO;
-import com.flab.fpay.api.pay.dto.PaymentTransactionResDTO;
+import com.flab.fpay.api.pay.dto.PaymentResDTO;
 import com.flab.fpay.api.pay.service.PaymentRequestService;
-import com.flab.fpay.api.pay.service.PaymentTransactionService;
+import com.flab.fpay.api.pay.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 class PayController {
 
     private final PaymentRequestService paymentRequestService;
-    private final PaymentTransactionService paymentTransactionService;
+    private final PaymentService paymentService;
 
     @PostMapping("/ready")
     public ResponseEntity<PaymentRequestResDTO> paymentReady(
@@ -31,20 +31,20 @@ class PayController {
     }
 
     @PostMapping("/approve")
-    public ResponseEntity<PaymentTransactionResDTO> paymentApprove(
-        @RequestBody PaymentTransactionDTO paymentTransactionDTO) {
+    public ResponseEntity<PaymentResDTO> paymentApprove(
+        @RequestBody PaymentDTO paymentDTO) {
 
-        PaymentTransactionResDTO paymentTransactionResDTO = paymentTransactionService.approvePayment(
-            paymentTransactionDTO);
+        PaymentResDTO paymentResDTO = paymentService.approvePayment(
+            paymentDTO);
 
-        return ResponseEntity.ok(paymentTransactionResDTO);
+        return ResponseEntity.ok(paymentResDTO);
     }
 
     @PostMapping("/cancel")
     public ResponseEntity<PaymentCancelResponseDTO> paymentCancel(
         @RequestBody PaymentCancelRequestDTO paymentCancelRequestDTO) {
 
-        PaymentCancelResponseDTO paymentCancelResponseDTO = paymentTransactionService.cancelPayment(
+        PaymentCancelResponseDTO paymentCancelResponseDTO = paymentService.cancelPayment(
             paymentCancelRequestDTO);
 
         return ResponseEntity.ok(paymentCancelResponseDTO);

@@ -4,6 +4,7 @@ import com.flab.fpay.api.company.CompanyService;
 import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
 import com.flab.fpay.api.pay.dto.PaymentRequestResDTO;
 import com.flab.fpay.api.pay.repository.PaymentRequestRepository;
+import com.flab.fpay.api.pay.repository.PaymentTransactionRepository;
 import com.flab.fpay.common.company.Company;
 import com.flab.fpay.common.pay.PaymentRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,15 @@ import java.util.NoSuchElementException;
 public class PaymentRequestService {
 
     private final PaymentRequestRepository paymentRequestRepository;
+    private final PaymentTransactionRepository paymentTransactionRepository;
     private final CompanyService companyService;
 
     public PaymentRequestResDTO savePaymentRequest(PaymentRequestDTO paymentRequestDTO) {
         Company company = companyService.getCompanyById(paymentRequestDTO.getCompanyId());
         PaymentRequest paymentRequest = paymentRequestDTO.toEntity(company);
         PaymentRequest savePayment = paymentRequestRepository.save(paymentRequest);
+        paymentTransactionRepository.save(savePayment.toPaymentTransaction());
+
         return new PaymentRequestResDTO(savePayment.getPaymentRequestId(),
             "https://test.co.kr" + "/" + savePayment.getPaymentRequestId());
     }

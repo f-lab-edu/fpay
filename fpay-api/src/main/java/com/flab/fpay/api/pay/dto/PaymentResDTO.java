@@ -1,6 +1,7 @@
 package com.flab.fpay.api.pay.dto;
 
 import com.flab.fpay.common.pay.Payment;
+import com.flab.fpay.common.pay.PaymentRequest;
 import com.flab.fpay.common.pay.PaymentTransaction;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -9,13 +10,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.Setter;
 
+@Builder
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class PaymentCancelResponseDTO extends BaseResponseDTO {
+public class PaymentResDTO extends BaseResponseDTO{
 
     private BigInteger paymentId; // 결제 ID
 
@@ -25,23 +27,29 @@ public class PaymentCancelResponseDTO extends BaseResponseDTO {
 
     private String companyUserId; // 가맹점 User Id
 
-    private BigDecimal cancelPrice; // 취소 요청 금액 ( 총액 )
+    private String paymentType; // 결제 타입
 
-    private BigDecimal remainingPrice;
+    private BigDecimal productPrice; // 상품 금액 ( 총액 )
+
+    private String productName; // 상품명
+
+    private Integer productCount; // 주문 수량
 
     private LocalDateTime createAt;
 
-    private LocalDateTime cancelAt;
+    private LocalDateTime paymentAt;
 
-    public PaymentCancelResponseDTO(Payment payment, PaymentCancelRequestDTO paymentCancelRequestDTO){
+    public PaymentResDTO(Payment payment, PaymentRequest paymentRequest){
         this.paymentId = payment.getPaymentRequestId();
         this.companyId = payment.getPaymentCompany();
         this.companyOrderNumber = payment.getCompanyOrderNumber();
         this.companyUserId = payment.getCompanyUserId();
-        this.cancelPrice = paymentCancelRequestDTO.getProductPrice();
-        this.remainingPrice = payment.getPaymentPrice();
+        this.paymentType = paymentRequest.getPaymentType();
+        this.productPrice = payment.getPaymentPrice();
+        this.productName = paymentRequest.getProductName();
+        this.productCount = paymentRequest.getProductCount();
         this.createAt = LocalDateTime.now();
-        this.cancelAt = payment.getPaymentAt();
+        this.paymentAt = payment.getPaymentAt();
     }
 
 }

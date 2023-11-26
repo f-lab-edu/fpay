@@ -6,8 +6,6 @@ import com.flab.fpay.api.pay.dto.PaymentDTO;
 import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
 import com.flab.fpay.api.pay.dto.PaymentRequestResDTO;
 import com.flab.fpay.api.pay.dto.PaymentResDTO;
-import com.flab.fpay.api.pay.service.PaymentApproveService;
-import com.flab.fpay.api.pay.service.PaymentCancelService;
 import com.flab.fpay.api.pay.service.PaymentRequestService;
 import com.flab.fpay.api.pay.service.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +19,6 @@ class PayController {
 
     private final PaymentRequestService paymentRequestService;
     private final PaymentService paymentService;
-    private final PaymentApproveService paymentApproveService;
-    private final PaymentCancelService paymentCancelService;
 
     @PostMapping("/ready")
     public ResponseEntity<PaymentRequestResDTO> paymentReady(
@@ -38,7 +34,7 @@ class PayController {
     public ResponseEntity<PaymentResDTO> paymentApprove(
         @RequestBody PaymentDTO paymentDTO) {
 
-        PaymentResDTO paymentResDTO = paymentApproveService.approvePayment(paymentDTO);
+        PaymentResDTO paymentResDTO = paymentService.approvePayment(paymentDTO);
 
         return ResponseEntity.ok(paymentResDTO);
     }
@@ -47,7 +43,7 @@ class PayController {
     public ResponseEntity<PaymentCancelResponseDTO> paymentCancel(
         @RequestBody PaymentCancelRequestDTO paymentCancelRequestDTO) {
 
-        PaymentCancelResponseDTO paymentCancelResponseDTO = paymentCancelService.cancelPayment(
+        PaymentCancelResponseDTO paymentCancelResponseDTO = paymentService.cancelPayment(
             paymentCancelRequestDTO);
 
         return ResponseEntity.ok(paymentCancelResponseDTO);

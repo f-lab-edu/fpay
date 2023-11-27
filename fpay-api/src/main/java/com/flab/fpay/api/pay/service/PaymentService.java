@@ -105,8 +105,8 @@ public class PaymentService {
             throw new RuntimeException("이미 결제취소 완료된 건 입니다.");
         }
 
-        if (paymentCancelRequestDTO.getProductPrice()
-            .compareTo(payment.getPaymentPrice()) > 0) {
+        if (payment.getPaymentPrice()
+            .compareTo(paymentCancelRequestDTO.getProductPrice()) < 0) {
             throw new RuntimeException("승인된 금액이 취소요청 금액 보다 적습니다.");
         }
 

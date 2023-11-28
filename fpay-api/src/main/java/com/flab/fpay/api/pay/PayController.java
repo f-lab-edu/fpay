@@ -6,31 +6,38 @@ import com.flab.fpay.api.pay.dto.PaymentDTO;
 import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
 import com.flab.fpay.api.pay.dto.PaymentRequestResDTO;
 import com.flab.fpay.api.pay.dto.PaymentResDTO;
+import com.flab.fpay.api.pay.mapper.PaymentRestMapper;
+import com.flab.fpay.api.pay.request.PaymentReadyCreateRequest;
+import com.flab.fpay.api.pay.response.PaymentReadyCreateResponse;
 import com.flab.fpay.api.pay.service.PaymentRequestService;
 import com.flab.fpay.api.pay.service.PaymentService;
+import com.flab.fpay.common.pay.PaymentRequest;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping(value = "/v1/payment")
+@RequestMapping(value = "/v1")
 class PayController {
 
     private final PaymentRequestService paymentRequestService;
     private final PaymentService paymentService;
+    private final PaymentRestMapper paymentRestMapper;
 
-    @PostMapping("/ready")
-    public ResponseEntity<PaymentRequestResDTO> paymentReady(
-        @RequestBody PaymentRequestDTO paymentRequestDTO) {
+    @PostMapping("/payment/ready")
+    public ResponseEntity<PaymentReadyCreateResponse> paymentReady(
+        @RequestBody PaymentReadyCreateRequest paymentReadyCreateRequest) {
+        PaymentRequest paymentRequest = paymentRestMapper.toPaymentReady(paymentReadyCreateRequest);
 
-        PaymentRequestResDTO paymentRequestResDTO = paymentRequestService.savePaymentRequest(
-            paymentRequestDTO);
+        paymentRequest = paymentRequestService.savePaymentRequest(paymentRequest);
 
-        return ResponseEntity.ok(paymentRequestResDTO);
+        return ResponseEntity.ok(paymentRestMapper.toPaymentReadyCreateResponse(paymentRequest));
     }
 
-    @PostMapping("/approve")
+    @PostMapping("/payment/approve")
     public ResponseEntity<PaymentResDTO> paymentApprove(
         @RequestBody PaymentDTO paymentDTO) {
 
@@ -39,7 +46,7 @@ class PayController {
         return ResponseEntity.ok(paymentResDTO);
     }
 
-    @PostMapping("/cancel")
+    @PostMapping("/payment/cancel")
     public ResponseEntity<PaymentCancelResponseDTO> paymentCancel(
         @RequestBody PaymentCancelRequestDTO paymentCancelRequestDTO) {
 

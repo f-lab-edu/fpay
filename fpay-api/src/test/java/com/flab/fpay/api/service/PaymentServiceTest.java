@@ -63,9 +63,9 @@ public class PaymentServiceTest {
     void approvePayment() {
         paymentRequestService.savePaymentRequest(paymentRequestDTO);
 
-        when(paymentRequestService.savePaymentRequest(any())).thenReturn(
-            new PaymentRequestResDTO(BigInteger.valueOf(1), "https://test.co.rk")
-        );
+//        when(paymentRequestService.savePaymentRequest(any())).thenReturn(
+//            new PaymentRequestResDTO(BigInteger.valueOf(1), "https://test.co.rk")
+//        );
 
         verify(paymentRequestRepository, times(1)).save(any(PaymentRequest.class));
     }

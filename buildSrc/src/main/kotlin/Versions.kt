@@ -7,4 +7,5 @@ object Versions {
     const val JDBC_MYSQL = "8.0.27"
     const val ASCIIDOCTOR = "3.3.2"
     const val REDISSON = "3.19.1"
+    const val MPA_STRUCT = "1.5.3.Final"
 }

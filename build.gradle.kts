@@ -30,6 +30,9 @@ subprojects {
         compileOnly("${Dependencies.LOMBOK}:${Versions.LOMBOK}")
         annotationProcessor("${Dependencies.LOMBOK}:${Versions.LOMBOK}")
 
+        implementation("${Dependencies.MPA_STRUCT}:${Versions.MPA_STRUCT}")
+        annotationProcessor("${Dependencies.MPA_STRUCT_PROCESSOR}:${Versions.MPA_STRUCT}")
+
         testImplementation("${Dependencies.JUNIT5}:${Versions.JUNIT5}")
         testImplementation("${Dependencies.JUNIT_PLATFORM_LAUNCHER}:${Versions.JUNIT_PLATFORM_LAUNCHER}")
 

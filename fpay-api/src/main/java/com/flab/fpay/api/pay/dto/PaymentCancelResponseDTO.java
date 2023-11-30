@@ -34,7 +34,7 @@ public class PaymentCancelResponseDTO extends BaseResponseDTO {
     private LocalDateTime cancelAt;
 
     public PaymentCancelResponseDTO(Payment payment, PaymentCancelRequestDTO paymentCancelRequestDTO){
-        this.paymentId = payment.getPaymentRequestId();
+        this.paymentId = payment.getPaymentReadyId();
         this.companyId = payment.getPaymentCompany();
         this.companyOrderNumber = payment.getCompanyOrderNumber();
         this.companyUserId = payment.getCompanyUserId();

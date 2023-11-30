@@ -1,7 +1,7 @@
 package com.flab.fpay.api.pay.dto;
 
 import com.flab.fpay.common.pay.PayInfo;
-import com.flab.fpay.common.pay.PaymentRequest;
+import com.flab.fpay.common.pay.PaymentReady;
 import com.flab.fpay.common.pay.PaymentTransaction;
 import com.flab.fpay.common.pay.PaymentTypeInfo;
 import lombok.AllArgsConstructor;
@@ -31,15 +31,15 @@ public class PaymentTransactionDTO {
 
     private BigInteger uid;
 
-    public PaymentTransaction toEntity(PaymentRequest paymentRequest, PayInfo payInfo){
+    public PaymentTransaction toEntity(PaymentReady paymentReady, PayInfo payInfo){
         return PaymentTransaction.builder()
-                .paymentPrice(paymentRequest.getPaymentPrice())
-                .paymentCompany(paymentRequest.getCompanyId())
+                .paymentPrice(paymentReady.getPaymentPrice())
+                .paymentCompany(paymentReady.getCompanyId())
                 .companyUserId(this.companyUserId)
                 .companyOrderNumber(this.companyOrderNumber)
                 .uid(this.uid)
                 .paymentTypeInfoId(payInfo.getPaymentTypeInfoId())
-                .paymentRequestId(paymentRequest.getPaymentRequestId())
+                .paymentReadyId(paymentReady.getPaymentReadyId())
                 .paymentAt(LocalDateTime.now())
                 .build();
     }

@@ -46,8 +46,8 @@ public class PaymentTransaction extends BaseTimeEntity {
     @Column(name = "payment_id")
     private BigInteger paymentId;
 
-    @Column(name = "payment_request_id")
-    private BigInteger paymentRequestId;
+    @Column(name = "payment_ready_id")
+    private BigInteger paymentReadyId;
 
     @Column(name = "payment_status")
     private int paymentStatus;

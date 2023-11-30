@@ -1,7 +1,7 @@
 package com.flab.fpay.api.pay.dto;
 
 import com.flab.fpay.common.pay.Payment;
-import com.flab.fpay.common.pay.PaymentRequest;
+import com.flab.fpay.common.pay.PaymentReady;
 import com.flab.fpay.common.pay.PaymentTransaction;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -23,7 +23,7 @@ public class PaymentResDTO extends BaseResponseDTO{
 
     private BigInteger companyId; // 가맹점 ID
 
-    private BigInteger paymentRequestId; // 결제승인 요청 ID
+    private BigInteger paymentReadyId; // 결제승인 요청 ID
 
     private String companyOrderNumber; // 가맹점 주문번호
 
@@ -41,15 +41,15 @@ public class PaymentResDTO extends BaseResponseDTO{
 
     private LocalDateTime paymentAt;
 
-    public PaymentResDTO(Payment payment, PaymentRequest paymentRequest){
+    public PaymentResDTO(Payment payment, PaymentReady paymentReady){
         this.paymentId = payment.getPaymentId();
         this.companyId = payment.getPaymentCompany();
         this.companyOrderNumber = payment.getCompanyOrderNumber();
         this.companyUserId = payment.getCompanyUserId();
-        this.paymentType = paymentRequest.getPaymentType();
+        this.paymentType = paymentReady.getPaymentType();
         this.productPrice = payment.getPaymentPrice();
-        this.productName = paymentRequest.getProductName();
-        this.productCount = paymentRequest.getProductCount();
+        this.productName = paymentReady.getProductName();
+        this.productCount = paymentReady.getProductCount();
         this.createAt = payment.getCreatedAt();
         this.paymentAt = payment.getPaymentAt();
     }

@@ -7,12 +7,12 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
-import com.flab.fpay.api.pay.dto.PaymentRequestResDTO;
-import com.flab.fpay.api.pay.repository.PaymentRequestRepository;
-import com.flab.fpay.api.pay.service.PaymentRequestService;
+import com.flab.fpay.api.pay.dto.PaymentReadyDTO;
+import com.flab.fpay.api.pay.dto.PaymentReadyResDTO;
+import com.flab.fpay.api.pay.repository.PaymentReadyRepository;
+import com.flab.fpay.api.pay.service.PaymentReadyService;
 import com.flab.fpay.common.company.Company;
-import com.flab.fpay.common.pay.PaymentRequest;
+import com.flab.fpay.common.pay.PaymentReady;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -25,23 +25,23 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-@SpringBootTest(classes = {PaymentRequestService.class})
-public class PaymentRequestServiceTest {
+@SpringBootTest(classes = {PaymentReadyService.class})
+public class PaymentReadyServiceTest {
 
     @MockBean
-    PaymentRequestService paymentRequestService;
+    PaymentReadyService paymentReadyService;
 
     @Mock
-    PaymentRequestRepository paymentRequestRepository;
+    PaymentReadyRepository paymentReadyRepository;
 
-    PaymentRequestDTO paymentRequestDTO;
-    PaymentRequest paymentRequest;
+    PaymentReadyDTO paymentReadyDTO;
+    PaymentReady paymentReady;
     Company company;
 
     @BeforeEach
     void setUp() {
 
-        paymentRequestDTO = PaymentRequestDTO.builder()
+        paymentReadyDTO = PaymentReadyDTO.builder()
             .companyId(BigInteger.valueOf(1))
             .companyOrderNumber("EAEAEAE")
             .companyUserId("baebull70")
@@ -55,15 +55,15 @@ public class PaymentRequestServiceTest {
         company = new Company(BigInteger.valueOf(1), "무신사", LocalDateTime.now(),
             LocalDateTime.now());
 
-        paymentRequest = paymentRequestDTO.toEntity(company);
+        paymentReady = paymentReadyDTO.toEntity(company);
 
     }
 
     @Test
     @DisplayName("결제 요청")
-    void savePaymentRequestTest() {
+    void savePaymentReadyTest() {
 
-//        paymentRequestService.savePaymentRequest(paymentRequestDTO);
+//        PaymentReadyService.savePaymentRequest(paymentRequestDTO);
 
 //        when(paymentRequestService.savePaymentRequest(any())).thenReturn(
 //            new PaymentRequestResDTO(BigInteger.valueOf(1), "https://test.co.rk")
@@ -76,14 +76,14 @@ public class PaymentRequestServiceTest {
     @Test
     @DisplayName("결제 요청 정보 찾기")
     void getPaymentRequestByIdTest() {
-        when(paymentRequestService.getPaymentRequestById(any())).thenReturn(paymentRequest);
+        when(paymentReadyService.getPaymentReadyById(any())).thenReturn(paymentReady);
 
-        PaymentRequest findById = paymentRequestService.getPaymentRequestById(
+        PaymentReady findById = paymentReadyService.getPaymentReadyById(
             BigInteger.valueOf(1));
 
         assertThat(findById).isNotNull();
-        assertThat(findById.getPaymentRequestId()).isEqualTo(paymentRequest.getPaymentRequestId());
-        assertThat(findById.getCompanyId()).isEqualTo(paymentRequest.getCompanyId());
+        assertThat(findById.getPaymentReadyId()).isEqualTo(paymentReady.getPaymentReadyId());
+        assertThat(findById.getCompanyId()).isEqualTo(paymentReady.getCompanyId());
 
     }
 
@@ -91,11 +91,11 @@ public class PaymentRequestServiceTest {
     @DisplayName("존재하지 않는 결제 정보를 요청했을 경우")
     void isNotExistsPaymentRequest() {
         // given
-        when(paymentRequestRepository.findById(any())).thenReturn(Optional.empty());
+        when(paymentReadyRepository.findById(any())).thenReturn(Optional.empty());
 
         // then
         assertThrows(NoSuchElementException.class, () -> {
-            PaymentRequest findById = paymentRequestService.getPaymentRequestById(
+            PaymentReady findById = paymentReadyService.getPaymentReadyById(
                 BigInteger.valueOf(1));
         });
     }

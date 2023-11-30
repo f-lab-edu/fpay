@@ -1,7 +1,7 @@
 package com.flab.fpay.api.pay.dto;
 
 import com.flab.fpay.common.company.Company;
-import com.flab.fpay.common.pay.PaymentRequest;
+import com.flab.fpay.common.pay.PaymentReady;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentRequestDTO {
+public class PaymentReadyDTO {
 
     private BigInteger companyId; // 가맹점 ID
 
@@ -30,8 +30,8 @@ public class PaymentRequestDTO {
 
     private LocalDateTime requestAt; // 결제 요청 시각 ( 가맹점 기준 )
 
-    public PaymentRequest toEntity(Company company) {
-        return PaymentRequest.builder()
+    public PaymentReady toEntity(Company company) {
+        return PaymentReady.builder()
                 .companyId(company.getCompanyId())
                 .companyOrderNumber(this.companyOrderNumber)
                 .companyUserId(this.companyUserId)

@@ -9,7 +9,7 @@ import com.flab.fpay.api.pay.dto.PaymentResDTO;
 import com.flab.fpay.api.pay.repository.PaymentRepository;
 import com.flab.fpay.api.pay.repository.PaymentTransactionRepository;
 import com.flab.fpay.common.pay.Payment;
-import com.flab.fpay.common.pay.PaymentRequest;
+import com.flab.fpay.common.pay.PaymentReady;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.NoSuchElementException;
@@ -31,12 +31,12 @@ public class PaymentService {
     private final PaymentTransactionRepository paymentTransactionRepository;
     private final PaymentRepository paymentRepository;
     private final RedissonClient redissonClient;
-    private final PaymentRequestService paymentRequestService;
+    private final PaymentReadyService paymentReadyService;
     private final ApproveMoney approveMoney;
 
-    public boolean findPaymentApproveId(BigInteger paymentRequestId) {
+    public boolean findPaymentApproveId(BigInteger paymentReadyId) {
         return paymentRepository
-            .findPaymentByPaymentRequestId(paymentRequestId)
+            .findPaymentByPaymentReadyId(paymentReadyId)
             .isPresent();
     }
 
@@ -57,20 +57,20 @@ public class PaymentService {
                 throw new RuntimeException("같은 결제건이 현재 결제 진행중 입니다.");
             }
 
-            PaymentRequest paymentRequest = paymentRequestService.getPaymentRequestById(
+            PaymentReady paymentReady = paymentReadyService.getPaymentReadyById(
                 paymentDTO.getPaymentId());
             Payment payment = null;
 
             if (!paymentDTO.getCompanyOrderNumber()
-                .equals(paymentRequest.getCompanyOrderNumber()) &&
-                !paymentDTO.getCompanyUserId().equals(paymentRequest.getCompanyUserId())
+                .equals(paymentReady.getCompanyOrderNumber()) &&
+                !paymentDTO.getCompanyUserId().equals(paymentReady.getCompanyUserId())
                 &&
-                !paymentDTO.getProductPrice().equals(paymentRequest.getPaymentPrice())) {
+                !paymentDTO.getProductPrice().equals(paymentReady.getPaymentPrice())) {
                 throw new RuntimeException("결제 요청 정보와 승인 정보가 다릅니다.");
             }
 
-            if (paymentRequest.getPaymentType().equals("MONEY")) {
-                payment = approveMoney.approve(paymentDTO, paymentRequest);
+            if (paymentReady.getPaymentType().equals("MONEY")) {
+                payment = approveMoney.approve(paymentDTO, paymentReady);
                 payment.setPaymentStatus(ApproveStatus.SUCCESS.getValue());
             }
 
@@ -79,7 +79,7 @@ public class PaymentService {
             Payment savePayment = paymentRepository.save(payment);
             paymentTransactionRepository.save(savePayment.toPaymentTransaction());
 
-            return new PaymentResDTO(savePayment, paymentRequest);
+            return new PaymentResDTO(savePayment, paymentReady);
 
         } catch (IllegalStateException | InterruptedException e) {
             throw new RuntimeException(e);

@@ -32,8 +32,8 @@ public class Payment extends BaseTimeEntity {
     @Column(name = "payment_id")
     private BigInteger paymentId;
 
-    @Column(name = "payment_request_id")
-    private BigInteger paymentRequestId;
+    @Column(name = "payment_ready_id")
+    private BigInteger paymentReadyId;
 
     @Column(name = "payment_company")
     private BigInteger paymentCompany;
@@ -62,7 +62,7 @@ public class Payment extends BaseTimeEntity {
     public PaymentTransaction toPaymentTransaction(){
         return PaymentTransaction.builder()
             .paymentId(this.paymentId)
-            .paymentRequestId(this.paymentRequestId)
+            .paymentReadyId(this.paymentReadyId)
             .paymentCompany(this.paymentCompany)
             .companyOrderNumber(this.companyOrderNumber)
             .paymentPrice(this.paymentPrice)

@@ -10,19 +10,19 @@ import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Table
-@Entity(name = "payment_request")
+@Entity(name = "payment_ready")
 @Getter
 @Setter
 @ToString
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentRequest extends BaseTimeEntity {
+public class PaymentReady extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_request_id")
-    private BigInteger paymentRequestId;
+    @Column(name = "payment_ready_id")
+    private BigInteger paymentReadyId;
 
     @Column(name = "company_id")
     private BigInteger companyId;
@@ -50,7 +50,7 @@ public class PaymentRequest extends BaseTimeEntity {
 
     public PaymentTransaction toPaymentTransaction(){
         return PaymentTransaction.builder()
-            .paymentRequestId(this.paymentRequestId)
+            .paymentReadyId(this.paymentReadyId)
             .paymentCompany(this.companyId)
             .companyOrderNumber(this.companyOrderNumber)
             .paymentPrice(this.paymentPrice)

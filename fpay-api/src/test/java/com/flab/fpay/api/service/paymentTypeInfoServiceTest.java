@@ -5,11 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
+import com.flab.fpay.api.pay.dto.PaymentReadyDTO;
 import com.flab.fpay.api.pay.repository.PaymentTypeInfoRepository;
 import com.flab.fpay.api.pay.service.PaymentTypeInfoService;
 import com.flab.fpay.common.company.Company;
-import com.flab.fpay.common.pay.PaymentRequest;
+import com.flab.fpay.common.pay.PaymentReady;
 import com.flab.fpay.common.pay.PaymentTypeInfo;
 import java.math.BigDecimal;
 import java.math.BigInteger;

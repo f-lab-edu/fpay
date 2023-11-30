@@ -15,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class PaymentReadyCreateResponse {
 
-    private BigInteger paymentRequestId; // 결제 요청 번호
+    private BigInteger paymentReadyId; // 결제 요청 번호
 
     private String redirectURL; // 결제 페이지
 

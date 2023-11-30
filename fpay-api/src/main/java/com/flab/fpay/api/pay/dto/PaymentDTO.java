@@ -2,7 +2,7 @@ package com.flab.fpay.api.pay.dto;
 
 import com.flab.fpay.common.pay.PayInfo;
 import com.flab.fpay.common.pay.Payment;
-import com.flab.fpay.common.pay.PaymentRequest;
+import com.flab.fpay.common.pay.PaymentReady;
 import com.flab.fpay.common.pay.PaymentTransaction;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -30,15 +30,15 @@ public class PaymentDTO {
 
     private BigInteger uid;
 
-    public Payment toEntity(PaymentRequest paymentRequest, PayInfo payInfo){
+    public Payment toEntity(PaymentReady paymentReady, PayInfo payInfo){
         return Payment.builder()
-                .paymentPrice(paymentRequest.getPaymentPrice())
-                .paymentCompany(paymentRequest.getCompanyId())
+                .paymentPrice(paymentReady.getPaymentPrice())
+                .paymentCompany(paymentReady.getCompanyId())
                 .companyUserId(this.companyUserId)
                 .companyOrderNumber(this.companyOrderNumber)
                 .uid(this.uid)
                 .paymentTypeInfoId(payInfo.getPaymentTypeInfoId())
-                .paymentRequestId(paymentRequest.getPaymentRequestId())
+                .paymentReadyId(paymentReady.getPaymentReadyId())
                 .paymentAt(LocalDateTime.now())
                 .build();
     }

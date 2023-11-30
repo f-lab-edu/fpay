@@ -1,6 +1,6 @@
 package com.flab.fpay.api.pay.dto;
 
-import lombok.AccessLevel;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-public class PaymentRequestResDTO {
+public class PaymentReadyResDTO {
 
     private BigInteger paymentId; // 결제 번호
 
@@ -19,7 +19,7 @@ public class PaymentRequestResDTO {
     private LocalDateTime createAt;
 
     @Builder
-    public PaymentRequestResDTO(BigInteger paymentId, String redirectURL){
+    public PaymentReadyResDTO(BigInteger paymentId, String redirectURL){
         this.paymentId = paymentId;
         this.redirectURL = redirectURL;
         this.createAt = LocalDateTime.now();

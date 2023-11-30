@@ -3,18 +3,14 @@ package com.flab.fpay.api.pay;
 import com.flab.fpay.api.pay.dto.PaymentCancelRequestDTO;
 import com.flab.fpay.api.pay.dto.PaymentCancelResponseDTO;
 import com.flab.fpay.api.pay.dto.PaymentDTO;
-import com.flab.fpay.api.pay.dto.PaymentRequestDTO;
-import com.flab.fpay.api.pay.dto.PaymentRequestResDTO;
 import com.flab.fpay.api.pay.dto.PaymentResDTO;
 import com.flab.fpay.api.pay.mapper.PaymentRestMapper;
 import com.flab.fpay.api.pay.request.PaymentReadyCreateRequest;
 import com.flab.fpay.api.pay.response.PaymentReadyCreateResponse;
-import com.flab.fpay.api.pay.service.PaymentRequestService;
+import com.flab.fpay.api.pay.service.PaymentReadyService;
 import com.flab.fpay.api.pay.service.PaymentService;
-import com.flab.fpay.common.pay.PaymentRequest;
+import com.flab.fpay.common.pay.PaymentReady;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,18 +19,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/v1")
 class PayController {
 
-    private final PaymentRequestService paymentRequestService;
+    private final PaymentReadyService paymentReadyService;
     private final PaymentService paymentService;
     private final PaymentRestMapper paymentRestMapper;
 
     @PostMapping("/payment/ready")
     public ResponseEntity<PaymentReadyCreateResponse> paymentReady(
         @RequestBody PaymentReadyCreateRequest paymentReadyCreateRequest) {
-        PaymentRequest paymentRequest = paymentRestMapper.toPaymentReady(paymentReadyCreateRequest);
+        PaymentReady PaymentReady = paymentRestMapper.toPaymentReady(paymentReadyCreateRequest);
 
-        paymentRequest = paymentRequestService.savePaymentRequest(paymentRequest);
+        PaymentReady = paymentReadyService.savePaymentReady(PaymentReady);
 
-        return ResponseEntity.ok(paymentRestMapper.toPaymentReadyCreateResponse(paymentRequest));
+        return ResponseEntity.ok(paymentRestMapper.toPaymentReadyCreateResponse(PaymentReady));
     }
 
     @PostMapping("/payment/approve")

@@ -14,9 +14,11 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentReadyCreateRequest {
+public class PaymentReadyRequest {
 
     private BigInteger companyId; // 가맹점 ID
+
+    private BigInteger uid; // 사용자 Id
 
     private String companyOrderNumber; // 가맹점 주문번호
 

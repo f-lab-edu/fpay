@@ -27,6 +27,9 @@ public class PaymentReady extends BaseTimeEntity {
     @Column(name = "company_id")
     private BigInteger companyId;
 
+    @Column(name = "uid")
+    private BigInteger uid;
+
     @Column(name = "company_order_number")
     private String companyOrderNumber;
 
@@ -47,6 +50,18 @@ public class PaymentReady extends BaseTimeEntity {
 
     @Column(name = "request_at")
     private LocalDateTime requestAt;
+
+    public Payment toPayment(BigInteger paymentTypeInfoId){
+        return Payment.builder()
+            .paymentReadyId(this.paymentReadyId)
+            .paymentCompany(this.companyId)
+            .companyOrderNumber(this.companyOrderNumber)
+            .paymentPrice(this.paymentPrice)
+            .companyUserId(this.companyUserId)
+            .uid(this.uid)
+            .paymentTypeInfoId(paymentTypeInfoId)
+            .build();
+    }
 
     public PaymentTransaction toPaymentTransaction(){
         return PaymentTransaction.builder()

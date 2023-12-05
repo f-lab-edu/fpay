@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PaymentReadyCreateResponse {
+public class PaymentReadyResponse {
 
     private BigInteger paymentReadyId; // 결제 요청 번호
 

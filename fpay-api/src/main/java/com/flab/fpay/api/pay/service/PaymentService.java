@@ -34,20 +34,20 @@ public class PaymentService {
     private final PaymentReadyService paymentReadyService;
     private final ApproveMoney approveMoney;
 
-    public boolean findPaymentApproveId(BigInteger paymentReadyId) {
+    public boolean findPaymentApprovePaymentReadyId(BigInteger paymentReadyId) {
         return paymentRepository
             .findPaymentByPaymentReadyId(paymentReadyId)
             .isPresent();
     }
 
     //   결제 승인
-    public PaymentResDTO approvePayment(PaymentDTO paymentDTO) {
+    public Payment approvePayment(PaymentReady paymentReady) {
 
-        if (findPaymentApproveId(paymentDTO.getPaymentId())) {
+        if (findPaymentApprovePaymentReadyId(paymentReady.getPaymentReadyId())) {
             throw new RuntimeException("이미 결제가 완료된 건 입니다.");
         }
 
-        RLock lock = redissonClient.getLock("approveTemp:" + paymentDTO.getPaymentId());
+        RLock lock = redissonClient.getLock("approveTemp:" + paymentReady.getPaymentReadyId());
         boolean available = false;
 
         try {
@@ -57,30 +57,21 @@ public class PaymentService {
                 throw new RuntimeException("같은 결제건이 현재 결제 진행중 입니다.");
             }
 
-            PaymentReady paymentReady = paymentReadyService.getPaymentReadyById(
-                paymentDTO.getPaymentId());
-            Payment payment = null;
+            PaymentReady findPaymentReady = paymentReadyService.getPaymentReadyById(paymentReady.getPaymentReadyId());
 
-            if (!paymentDTO.getCompanyOrderNumber()
-                .equals(paymentReady.getCompanyOrderNumber()) &&
-                !paymentDTO.getCompanyUserId().equals(paymentReady.getCompanyUserId())
-                &&
-                !paymentDTO.getProductPrice().equals(paymentReady.getPaymentPrice())) {
+            if (!paymentReady.getCompanyOrderNumber()
+                .equals(findPaymentReady.getCompanyOrderNumber()) &&
+                !paymentReady.getCompanyUserId().equals(findPaymentReady.getCompanyUserId()) &&
+                !paymentReady.getPaymentPrice().equals(findPaymentReady.getPaymentPrice())) {
                 throw new RuntimeException("결제 요청 정보와 승인 정보가 다릅니다.");
             }
 
-            if (paymentReady.getPaymentType().equals("MONEY")) {
-                payment = approveMoney.approve(paymentDTO, paymentReady);
-                payment.setPaymentStatus(ApproveStatus.SUCCESS.getValue());
-            }
-
-            logger.info("[PaymentApprove]:::" + payment.toString());
-
+            Payment payment = processPaymentByPaymentType(findPaymentReady);
+            payment.setPaymentStatus(ApproveStatus.SUCCESS.getValue());
             Payment savePayment = paymentRepository.save(payment);
             paymentTransactionRepository.save(savePayment.toPaymentTransaction());
 
-            return new PaymentResDTO(savePayment, paymentReady);
-
+            return savePayment;
         } catch (IllegalStateException | InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
@@ -90,27 +81,34 @@ public class PaymentService {
         }
     }
 
-    public PaymentCancelResponseDTO cancelPayment(PaymentCancelRequestDTO paymentCancelRequestDTO) {
-        logger.info("[PaymentCancel]:::" + paymentCancelRequestDTO.toString());
+    public Payment processPaymentByPaymentType(PaymentReady paymentReady){
+        if (paymentReady.getPaymentType().equals("MONEY")) {
+            return approveMoney.approve(paymentReady);
+        }
+        throw new RuntimeException("Unsupported payment type");
+    }
+
+    public PaymentCancelResponseDTO cancelPayment(Payment cancelPayment) {
+        logger.info("[PaymentCancel]:::" + cancelPayment.toString());
 
         PaymentCancelResponseDTO paymentCancelResponseDTO = null;
 
         // 승인된 금액이 취소요청한 금액만큼 존재하는지 체크
-        Payment payment = paymentRepository
+        Payment findPayment = paymentRepository
             .findById(
-                paymentCancelRequestDTO.getPaymentId())
+                cancelPayment.getPaymentId())
             .orElseThrow(() -> new NoSuchElementException("취소요청하신 결제건이 존재하지 않습니다."));
 
-        if (payment.getPaymentStatus() == ApproveStatus.CANCEL.getValue()) {
+        if (findPayment.getPaymentStatus() == ApproveStatus.CANCEL.getValue()) {
             throw new RuntimeException("이미 결제취소 완료된 건 입니다.");
         }
 
-        if (payment.getPaymentPrice()
-            .compareTo(paymentCancelRequestDTO.getProductPrice()) < 0) {
+        if (findPayment.getPaymentPrice()
+            .compareTo(cancelPayment.getPaymentPrice()) < 0) {
             throw new RuntimeException("승인된 금액이 취소요청 금액 보다 적습니다.");
         }
 
-        RLock lock = redissonClient.getLock("cancelTemp:" + paymentCancelRequestDTO.getPaymentId());
+        RLock lock = redissonClient.getLock("cancelTemp:" + findPayment.getPaymentId());
         boolean available = false;
 
         try {
@@ -120,17 +118,17 @@ public class PaymentService {
                 throw new RuntimeException("같은 결제건이 현재 결제 취소 진행중 입니다.");
             }
 
-            BigDecimal paymentPrice = payment.getPaymentPrice()
-                .subtract(paymentCancelRequestDTO.getProductPrice().add(
-                    paymentCancelRequestDTO.getProductPrice().multiply(BigDecimal.valueOf(0.10)))
+            BigDecimal paymentPrice = findPayment.getPaymentPrice()
+                .subtract(cancelPayment.getPaymentPrice().add(
+                    cancelPayment.getPaymentPrice().multiply(BigDecimal.valueOf(0.10)))
                 );
 
             if (paymentPrice.compareTo(BigDecimal.ZERO) == 0) {
-                payment.setPaymentStatus(ApproveStatus.CANCEL.getValue());
+                findPayment.setPaymentStatus(ApproveStatus.CANCEL.getValue());
             }
 
-            payment.setPaymentPrice(paymentPrice);
-            Payment savePayment = paymentRepository.save(payment);
+            findPayment.setPaymentPrice(paymentPrice);
+            Payment savePayment = paymentRepository.save(findPayment);
             paymentTransactionRepository.save(savePayment.toPaymentTransaction());
 
             paymentCancelResponseDTO = new PaymentCancelResponseDTO(savePayment,

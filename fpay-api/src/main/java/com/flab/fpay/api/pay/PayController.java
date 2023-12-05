@@ -2,13 +2,16 @@ package com.flab.fpay.api.pay;
 
 import com.flab.fpay.api.pay.dto.PaymentCancelRequestDTO;
 import com.flab.fpay.api.pay.dto.PaymentCancelResponseDTO;
-import com.flab.fpay.api.pay.dto.PaymentDTO;
 import com.flab.fpay.api.pay.dto.PaymentResDTO;
 import com.flab.fpay.api.pay.mapper.PaymentRestMapper;
-import com.flab.fpay.api.pay.request.PaymentReadyCreateRequest;
-import com.flab.fpay.api.pay.response.PaymentReadyCreateResponse;
+import com.flab.fpay.api.pay.request.PaymentApproveRequest;
+import com.flab.fpay.api.pay.request.PaymentCancelRequest;
+import com.flab.fpay.api.pay.request.PaymentReadyRequest;
+import com.flab.fpay.api.pay.response.PaymentApproveResponse;
+import com.flab.fpay.api.pay.response.PaymentReadyResponse;
 import com.flab.fpay.api.pay.service.PaymentReadyService;
 import com.flab.fpay.api.pay.service.PaymentService;
+import com.flab.fpay.common.pay.Payment;
 import com.flab.fpay.common.pay.PaymentReady;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,30 +27,33 @@ class PayController {
     private final PaymentRestMapper paymentRestMapper;
 
     @PostMapping("/payment/ready")
-    public ResponseEntity<PaymentReadyCreateResponse> paymentReady(
-        @RequestBody PaymentReadyCreateRequest paymentReadyCreateRequest) {
-        PaymentReady PaymentReady = paymentRestMapper.toPaymentReady(paymentReadyCreateRequest);
+    public ResponseEntity<PaymentReadyResponse> paymentReady(
+        @RequestBody PaymentReadyRequest paymentReadyRequest) {
+        PaymentReady PaymentReady = paymentRestMapper.toPaymentReady(paymentReadyRequest);
 
         PaymentReady = paymentReadyService.savePaymentReady(PaymentReady);
 
-        return ResponseEntity.ok(paymentRestMapper.toPaymentReadyCreateResponse(PaymentReady));
+        return ResponseEntity.ok(paymentRestMapper.toPaymentReadyResponse(PaymentReady));
     }
 
     @PostMapping("/payment/approve")
-    public ResponseEntity<PaymentResDTO> paymentApprove(
-        @RequestBody PaymentDTO paymentDTO) {
+    public ResponseEntity<PaymentApproveResponse> paymentApprove(
+        @RequestBody PaymentApproveRequest paymentApproveRequest) {
+        PaymentReady paymentReady = paymentRestMapper.toPaymentReadyFromPaymentApproveRequest(
+            paymentApproveRequest);
 
-        PaymentResDTO paymentResDTO = paymentService.approvePayment(paymentDTO);
+        PaymentApproveResponse paymentApproveResponse = paymentRestMapper.toPaymentApproveResponse(
+            paymentService.approvePayment(paymentReady));
 
-        return ResponseEntity.ok(paymentResDTO);
+        return ResponseEntity.ok(paymentApproveResponse);
     }
 
     @PostMapping("/payment/cancel")
     public ResponseEntity<PaymentCancelResponseDTO> paymentCancel(
-        @RequestBody PaymentCancelRequestDTO paymentCancelRequestDTO) {
+        @RequestBody PaymentCancelRequest paymentCancelRequest) {
 
-        PaymentCancelResponseDTO paymentCancelResponseDTO = paymentService.cancelPayment(
-            paymentCancelRequestDTO);
+        Payment payment = paymentRestMapper.toPaymentFromPaymentCancelRequest(paymentCancelRequest);
+        PaymentCancelResponseDTO paymentCancelResponseDTO = paymentService.cancelPayment(payment);
 
         return ResponseEntity.ok(paymentCancelResponseDTO);
     }

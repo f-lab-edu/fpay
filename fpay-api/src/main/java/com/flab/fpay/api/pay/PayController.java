@@ -8,6 +8,7 @@ import com.flab.fpay.api.pay.request.PaymentApproveRequest;
 import com.flab.fpay.api.pay.request.PaymentCancelRequest;
 import com.flab.fpay.api.pay.request.PaymentReadyRequest;
 import com.flab.fpay.api.pay.response.PaymentApproveResponse;
+import com.flab.fpay.api.pay.response.PaymentCancelResponse;
 import com.flab.fpay.api.pay.response.PaymentReadyResponse;
 import com.flab.fpay.api.pay.service.PaymentReadyService;
 import com.flab.fpay.api.pay.service.PaymentService;
@@ -39,6 +40,7 @@ class PayController {
     @PostMapping("/payment/approve")
     public ResponseEntity<PaymentApproveResponse> paymentApprove(
         @RequestBody PaymentApproveRequest paymentApproveRequest) {
+
         PaymentReady paymentReady = paymentRestMapper.toPaymentReadyFromPaymentApproveRequest(
             paymentApproveRequest);
 
@@ -49,13 +51,14 @@ class PayController {
     }
 
     @PostMapping("/payment/cancel")
-    public ResponseEntity<PaymentCancelResponseDTO> paymentCancel(
+    public ResponseEntity<PaymentCancelResponse> paymentCancel(
         @RequestBody PaymentCancelRequest paymentCancelRequest) {
 
         Payment payment = paymentRestMapper.toPaymentFromPaymentCancelRequest(paymentCancelRequest);
-        PaymentCancelResponseDTO paymentCancelResponseDTO = paymentService.cancelPayment(payment);
+        PaymentCancelResponse paymentCancelResponse = paymentRestMapper.toPaymentCancelResponse(
+            paymentService.cancelPayment(payment), payment.getPaymentPrice());
 
-        return ResponseEntity.ok(paymentCancelResponseDTO);
+        return ResponseEntity.ok(paymentCancelResponse);
     }
 
 }

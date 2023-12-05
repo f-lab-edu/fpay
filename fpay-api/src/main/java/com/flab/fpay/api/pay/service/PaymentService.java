@@ -88,10 +88,10 @@ public class PaymentService {
         throw new RuntimeException("Unsupported payment type");
     }
 
-    public PaymentCancelResponseDTO cancelPayment(Payment cancelPayment) {
+    public Payment cancelPayment(Payment cancelPayment) {
         logger.info("[PaymentCancel]:::" + cancelPayment.toString());
 
-        PaymentCancelResponseDTO paymentCancelResponseDTO = null;
+//        PaymentCancelResponseDTO paymentCancelResponseDTO = null;
 
         // 승인된 금액이 취소요청한 금액만큼 존재하는지 체크
         Payment findPayment = paymentRepository
@@ -131,10 +131,10 @@ public class PaymentService {
             Payment savePayment = paymentRepository.save(findPayment);
             paymentTransactionRepository.save(savePayment.toPaymentTransaction());
 
-            paymentCancelResponseDTO = new PaymentCancelResponseDTO(savePayment,
-                paymentCancelRequestDTO);
+//            paymentCancelResponseDTO = new PaymentCancelResponseDTO(savePayment,
+//                paymentCancelRequestDTO);
 
-            return paymentCancelResponseDTO;
+            return savePayment;
         } catch (IllegalStateException | InterruptedException e) {
             throw new RuntimeException(e);
         } finally {
